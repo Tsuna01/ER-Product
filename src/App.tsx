@@ -5,7 +5,8 @@ import './App.css'
 import Navbar from "./component/Navbar";
 
 //Page
-import Contact from "./page/contact";
+import Contact from "./page/Contact";
+import Home from "./page/Home";
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
     <BrowserRouter>
     <Navbar/>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
     </BrowserRouter>
