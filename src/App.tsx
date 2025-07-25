@@ -6,9 +6,11 @@ import './App.css'
 
 
 //Page
-import Contact from "./page/Contact";
-import Home from "./page/Home";
+// import Contact from "./page/Contact";
+// import Home from "./page/Home";
 import Login from "./page/Login";
+import DashboardPage from "./page/DashboardPage";
+
 
 function App() {
 
@@ -16,11 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-
-      </Routes>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/DashboardPage" element={<DashboardPage />} />
       </Routes>
     </BrowserRouter>
   )
