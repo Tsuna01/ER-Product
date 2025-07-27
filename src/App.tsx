@@ -2,14 +2,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
 
 //component
-// import Navbar from "./component/Navbar";
+import StaffForm from "./component/StaffForm";
+import WardForm from "./component/WardForm";
+
+
+//Layout
+import LayoutLogin from "./layout/AuthLayout";
+import MainLayout from "./layout/MainLayout";
+
 
 
 //Page
-// import Contact from "./page/Contact";
 // import Home from "./page/Home";
 import Login from "./page/Login";
-import DashboardPage from "./page/DashboardPage";
+import AdminPanel from "./page/AdminPanel";
 
 
 function App() {
@@ -17,8 +23,17 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/DashboardPage" element={<DashboardPage />} />
+
+        <Route element={<LayoutLogin />}>
+          <Route path="/login" element={<Login />} />
+        </Route>
+
+        <Route element={<MainLayout />}>
+          <Route path="/AdminPanel" element={<AdminPanel />} />
+          <Route path="/DT/StaffForm" element={<StaffForm />} />
+          <Route path="/DT/WardForm" element={<WardForm />} />
+        </Route>
+
       </Routes>
     </BrowserRouter>
   )
