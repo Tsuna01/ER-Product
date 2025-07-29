@@ -4,6 +4,7 @@ import './App.css'
 //component
 import StaffForm from "./component/StaffForm";
 import WardForm from "./component/WardForm";
+import EmployeeD from "./component/EmployeeD";
 
 
 //Layout
@@ -32,6 +33,7 @@ function App() {
           <Route path="/AdminPanel" element={<AdminPanel />} />
           <Route path="/DT/StaffForm" element={<StaffForm />} />
           <Route path="/DT/WardForm" element={<WardForm />} />
+          <Route path="/EMP/D" element={<EmployeeD />} />
         </Route>
 
       </Routes>

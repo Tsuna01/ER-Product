@@ -1,5 +1,17 @@
+import React, { useState } from "react";
+
 
 export default function StaffForm() {
+  const [educationRows, setEducationRows] = useState([
+    { degree: "", date: "1987-12-07", institution: "", other: "" },
+  ]);
+
+  const handleAddEducation = () => {
+    setEducationRows([
+      ...educationRows,
+      { degree: "", date: "", institution: "", other: "" },
+    ]);
+  };
   return (
     <form className="max-w-4xl mx-auto p-8 mb-10 mt-10 bg-white shadow-md rounded-md">
       <h1 className="text-2xl font-bold text-center text-cyan-700 mb-6">
@@ -34,23 +46,80 @@ export default function StaffForm() {
         </div>
       </section>
 
-      {/* วุฒิการศึกษา */}
+            {/* วุฒิการศึกษา */}
       <section className="mb-6">
-        <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">วุฒิการศึกษา</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <select className="input ">
+        <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">
+          วุฒิการศึกษา
+        </h2>
 
-            <option value="associate">อนุปริญญา / ปวส.</option>
-            <option value="bachelor">ปริญญาตรี (ป.ตรี)</option>
-            <option value="master">ปริญญาโท (ป.โท)</option>
-            <option value="doctorate">ปริญญาเอก (ป.เอก)</option>
+        {educationRows.map((row, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"
+          >
+            <select
+              className="input"
+              value={row.degree}
+              onChange={(e) => {
+                const newRows = [...educationRows];
+                newRows[index].degree = e.target.value;
+                setEducationRows(newRows);
+              }}
+            >
+              <option value="">เลือกวุฒิการศึกษา</option>
+              <option value="associate">อนุปริญญา / ปวส.</option>
+              <option value="bachelor">ปริญญาตรี (ป.ตรี)</option>
+              <option value="master">ปริญญาโท (ป.โท)</option>
+              <option value="doctorate">ปริญญาเอก (ป.เอก)</option>
+            </select>
 
+            <input
+              className="input text-amber-700"
+              type="date"
+              value={row.date}
+              onChange={(e) => {
+                const newRows = [...educationRows];
+                newRows[index].date = e.target.value;
+                setEducationRows(newRows);
+              }}
+              required
+            />
 
-          </select>
-          <input className="input text-amber-700" type="date" defaultValue="1987-12-07" required />
-          <input className="input" type="text" placeholder="สถาบัน" required />
-          <input type="text" placeholder=" กรณีอื่นๆ " className="input" required />
-        </div>
+            <input
+              className="input"
+              type="text"
+              placeholder="สถาบัน"
+              value={row.institution}
+              onChange={(e) => {
+                const newRows = [...educationRows];
+                newRows[index].institution = e.target.value;
+                setEducationRows(newRows);
+              }}
+              required
+            />
+
+            <input
+              className="input md:col-span-3"
+              type="text"
+              placeholder="กรณีอื่นๆ"
+              value={row.other}
+              onChange={(e) => {
+                const newRows = [...educationRows];
+                newRows[index].other = e.target.value;
+                setEducationRows(newRows);
+              }}
+              required
+            />
+          </div>
+        ))}
+
+        <button
+          type="button"
+          onClick={handleAddEducation}
+          className="mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+        >
+          เพิ่มวุฒิการศึกษา +
+        </button>
       </section>
 
       {/* ประสบการณ์ทำงาน */}
