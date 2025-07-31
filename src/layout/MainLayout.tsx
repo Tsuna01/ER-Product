@@ -9,7 +9,7 @@ function MainLayout() {
       <SidebarMenu />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <main className="bg-customLG w-full h-screen flex-1 p-6">
+        <main className="bg-customLG w-full flex-1 p-6">
           <Outlet />
         </main>
       </div>

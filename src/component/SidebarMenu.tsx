@@ -24,7 +24,7 @@ export default function SidebarMenu() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   return (
-    <div className={`bg-white border-2 border-gray-200 shadow-md transition-all fixed rounded-xl duration-300 ${isSidebarOpen ? 'w-64' : 'w-16'}`}>
+    <div className={`bg-white border-2 border-gray-200 z-30 shadow-md transition-all fixed rounded-xl duration-300 ${isSidebarOpen ? 'w-64' : 'w-16'}`}>
       <div className="flex items-center justify-between p-4">
         {isSidebarOpen && <h2 className="font-bold text-lg">Hospital</h2>}
         <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
