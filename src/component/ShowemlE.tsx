@@ -7,7 +7,7 @@ function ShowemlE() {
             <th className="border border-gray-300 px-4 py-2">ชื่อ - นามสกุล</th>
             <th className="border border-gray-300 px-4 py-2">เลขบัตรประชาชน</th>
             <th className="border border-gray-300 px-4 py-2">วันที่ส่งตัว</th>
-            <th className="border border-gray-300 px-4 py-2">ตำแหน่งงาน</th>
+            <th className="border border-gray-300 px-4 py-2">แผนก</th>
           </tr>
         </thead>
         <tbody>
@@ -16,7 +16,7 @@ function ShowemlE() {
             <td className="border border-gray-300 px-4 py-2">สมชาย ใจดี</td>
             <td className="border border-gray-300 px-4 py-2">1234567890123</td>
             <td className="border border-gray-300 px-4 py-2">31/07/2025</td>
-            <td className="border border-gray-300 px-4 py-2">พนักงานบัญชี</td>
+            <td className="border border-gray-300 px-4 py-2">ทั่วไป</td>
           </tr>
         </tbody>
       </table>

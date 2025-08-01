@@ -22,7 +22,7 @@ export default function StaffForm() {
       <section className="mb-6">
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ข้อมูลส่วนตัว</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <input className="input" type="text" placeholder="ชื่อ" required />
+          <input className="input" type="text"  placeholder="ชื่อ" required />
           <input className="input" type="text" placeholder="นามสกุล" required />
           <select className="input ">
 

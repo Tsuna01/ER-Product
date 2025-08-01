@@ -22,7 +22,7 @@ function EmployeeU() {
                 
             </div>
             <div className="mt-[670px] border-l-8 border-cyan-500 flex ml-[80px]">
-                <h1 className="text-3xl text-cyan-800 ml-4 font-bold">รายงานผู้ป่วยคลินิกนอก</h1>
+                <h1 className="text-3xl text-cyan-800 ml-4 font-bold">รายงานผู้ป่วยในหอเฉพาะ</h1>
             </div>
             <ShowempU/>
         </div>

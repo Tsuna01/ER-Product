@@ -13,8 +13,8 @@ import {
 
 const menuItems = [
   { name: 'แดชบอร์ด', icon: Home , url : '/AdminPanel'},
-  { name: 'ข้อมูลผู้ป่วย', icon: User , url : '#'},
-  { name: 'ข้อมูลหมอ', icon: Stethoscope , url : '#'},
+  { name: 'ข้อมูลผู้ป่วย', icon: User , url : '/employee'},
+  { name: 'ข้อมูลหมอ', icon: Stethoscope , url : '/doctor'},
   { name: 'การเข้า/ออก', icon: ArrowRightLeft , url : '#'},
   { name: 'การจ่ายยา', icon: Pill , url : '#' },
   { name: 'การเงิน', icon: DollarSign , url : '#' },
