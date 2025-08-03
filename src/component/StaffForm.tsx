@@ -22,17 +22,17 @@ export default function StaffForm() {
       <section className="mb-6">
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ข้อมูลส่วนตัว</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <input className="input" type="text"  placeholder="ชื่อ" required />
-          <input className="input" type="text" placeholder="นามสกุล" required />
-          <select className="input ">
+          <input className="input" name="firstName" type="text"  placeholder="ชื่อ" required />
+          <input className="input" name="lastName"type="text" placeholder="นามสกุล" required />
+          <select className="input " name="gender">
 
             <option value="male" >ชาย</option>
             <option value="female" >หญิง</option>
 
           </select>
-          <input className="input" type="date" />
-          <input className="input" type="text" placeholder="ที่อยู่" required />
-          <input className="input" type="text" placeholder="เบอร์โทรศัพท์" required />
+          <input className="input" name="dob" type="date" />
+          <input className="input" name="address" type="text" placeholder="ที่อยู่" required />
+          <input className="input" name="phone" type="text" placeholder="เบอร์โทรศัพท์" required />
         </div>
       </section>
 
@@ -40,9 +40,9 @@ export default function StaffForm() {
       <section className="mb-6">
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ตำแหน่งงาน</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <input className="input" type="text" placeholder="ตำแหน่งงาน" required />
-          <input className="input" type="number" placeholder="เงินเดือน" required />
-          <input className="input" type="number" placeholder="แผนกที่รับผิดชอบ เช่น 1,2,3" required />
+          <input className="input" name="position" type="text" placeholder="ตำแหน่งงาน" required />
+          <input className="input" name="salary" type="number" placeholder="เงินเดือน" required />
+          <input className="input" name="wardIds" type="number" placeholder="แผนกที่รับผิดชอบ เช่น 1,2,3" required />
         </div>
       </section>
 
@@ -60,6 +60,7 @@ export default function StaffForm() {
             <select
               className="input"
               value={row.degree}
+              name={'qualification[${index}].degree'}
               onChange={(e) => {
                 const newRows = [...educationRows];
                 newRows[index].degree = e.target.value;
@@ -77,6 +78,7 @@ export default function StaffForm() {
               className="input text-amber-700"
               type="date"
               value={row.date}
+              name={'qualification[${index}].date'}
               onChange={(e) => {
                 const newRows = [...educationRows];
                 newRows[index].date = e.target.value;
@@ -90,6 +92,7 @@ export default function StaffForm() {
               type="text"
               placeholder="สถาบัน"
               value={row.institution}
+              name={'qualification[${index}].institution'}
               onChange={(e) => {
                 const newRows = [...educationRows];
                 newRows[index].institution = e.target.value;
@@ -103,6 +106,7 @@ export default function StaffForm() {
               type="text"
               placeholder="กรณีอื่นๆ"
               value={row.other}
+              name={'qualification[${index}].other'}
               onChange={(e) => {
                 const newRows = [...educationRows];
                 newRows[index].other = e.target.value;
@@ -126,10 +130,10 @@ export default function StaffForm() {
       <section>
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ประสบการณ์ทำงาน</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <input className="input" type="text" placeholder="ตำแหน่งงาน" required />
-          <input className="input text-green-400" type="date" defaultValue="1990-01-23" required />
-          <input className="input text-red-400" type="date" defaultValue="1993-05-01" required />
-          <input className="input md:col-span-3" type="text" placeholder="สถานที่ทำงาน" required />
+          <input className="input" type="text" placeholder="ตำแหน่งงาน" required name="workExperience.position"/>
+          <input className="input text-green-400" type="date" defaultValue="1990-01-23" required name="workExperience.startDate" />
+          <input className="input text-red-400" type="date" defaultValue="1993-05-01" required name="workExperience.endDate"/>
+          <input className="input md:col-span-3" type="text" placeholder="สถานที่ทำงาน" required name="workExperience.organization"/>
         </div>
       </section>
 
