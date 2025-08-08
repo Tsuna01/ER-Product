@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 
 export default function StaffForm() {
@@ -130,10 +130,10 @@ export default function StaffForm() {
       <section>
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ประสบการณ์ทำงาน</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <input className="input" type="text" placeholder="ตำแหน่งงาน" required name="workExperience.position"/>
-          <input className="input text-green-400" type="date" defaultValue="1990-01-23" required name="workExperience.startDate" />
-          <input className="input text-red-400" type="date" defaultValue="1993-05-01" required name="workExperience.endDate"/>
-          <input className="input md:col-span-3" type="text" placeholder="สถานที่ทำงาน" required name="workExperience.organization"/>
+          <input className="input" type="text" placeholder="ตำแหน่งงาน" required name="position"/>
+          <input className="input text-green-400" type="date" defaultValue="1990-01-23" required name="startDate" />
+          <input className="input text-red-400" type="date" defaultValue="1993-05-01" required name="endDate"/>
+          <input className="input md:col-span-3" type="text" placeholder="สถานที่ทำงาน" required name="organization"/>
         </div>
       </section>
 

@@ -14,7 +14,8 @@ import LayoutLogin from "./layout/AuthLayout";
 import MainLayout from "./layout/MainLayout";
 import HomeLayout from "./layout/HomeLayout";
 
-
+//--test--//
+import Test from "./component/Test";
 
 
 //Page
@@ -38,17 +39,20 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/Adminpanel" element={<AdminPanel />} />
           
-          <Route path="/DT/StaffForm" element={<StaffForm />} />
-          <Route path="/DT/WardForm" element={<WardForm />} />
-          <Route path="/EMP/D" element={<EmployeeD />} />
-          <Route path="/EMP/E" element={<EmployeeE />} />
-          <Route path="/EMP/U" element={<EmployeeU />} />
+          <Route path="/doctor/StaffForm" element={<StaffForm />} />
+          <Route path="/doctor/WardForm" element={<WardForm />} />
+          <Route path="/employee/D" element={<EmployeeD />} />
+          <Route path="/employee/E" element={<EmployeeE />} />
+          <Route path="/employee/U" element={<EmployeeU />} />
         </Route>
 
         <Route element={<HomeLayout />}>
           <Route path="/doctor" element={<Doctor />} />
           <Route path="/employee" element={<Employee />} />
+          <Route path="/Test" element={<Test />} />
+
         </Route>
+
 
 
       </Routes>
