@@ -8,12 +8,11 @@ import ShowUpdate from "../component/ShowUpdate";
 
 function Employee() {
   const [isFirstView, setIsFirstView] = useState<boolean>(true);
-  const [activeForm, setActiveForm] = useState(null);
+  const [activeForm, setActiveForm] = useState("ShowE");
 
 
   const toggleView = () => {
     setIsFirstView(prev => !prev);
-    setActiveForm(null);
   };
 
   const handleFormSelect = (props) => {

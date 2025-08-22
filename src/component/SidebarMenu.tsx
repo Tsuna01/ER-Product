@@ -16,7 +16,7 @@ const menuItems = [
   { name: 'ข้อมูลผู้ป่วย', icon: User , url : '/employee'},
   { name: 'ข้อมูลหมอ', icon: Stethoscope , url : '/doctor'},
   { name: 'การเข้า/ออก', icon: ArrowRightLeft , url : '#'},
-  { name: 'การจ่ายยา', icon: Pill , url : '#' },
+  { name: 'การจ่ายยา', icon: Pill , url : '/medications' },
   { name: 'การเงิน', icon: DollarSign , url : '#' },
 ]
 
