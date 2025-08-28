@@ -3,13 +3,13 @@ import { useState } from "react";
 
 export default function StaffForm() {
   const [educationRows, setEducationRows] = useState([
-    { degree: "", date: "1987-12-07", institution: "", other: "" },
+    { qual_type: "", qual_date: "1987-12-07", institution: "", other: "" },
   ]);
 
   const handleAddEducation = () => {
     setEducationRows([
       ...educationRows,
-      { degree: "", date: "", institution: "", other: "" },
+      { qual_type: "", qual_date: "", institution: "", other: "" },
     ]);
   };
   return (
@@ -22,16 +22,16 @@ export default function StaffForm() {
       <section className="mb-6">
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ข้อมูลส่วนตัว</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <input className="input" name="firstName" type="text"  placeholder="ชื่อ" required />
-          <input className="input" name="lastName"type="text" placeholder="นามสกุล" required />
+          <input className="input" name="first_name" type="text"  placeholder="ชื่อ" required />
+          <input className="input" name="last_name"type="text" placeholder="นามสกุล" required />
           <select className="input " name="gender">
 
-            <option value="male" >ชาย</option>
-            <option value="female" >หญิง</option>
+            <option value="M" >ชาย</option>
+            <option value="F" >หญิง</option>
 
           </select>
-          <input className="input" name="dob" type="date" />
-          <input className="input" name="address" type="text" placeholder="ที่อยู่" required />
+          <input className="input" name="date_of_birth" type="date" />
+          <input className="input" name="address_line" type="text" placeholder="ที่อยู่" required />
           <input className="input" name="phone" type="text" placeholder="เบอร์โทรศัพท์" required />
         </div>
       </section>
@@ -41,8 +41,8 @@ export default function StaffForm() {
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ตำแหน่งงาน</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <input className="input" name="position" type="text" placeholder="ตำแหน่งงาน" required />
-          <input className="input" name="salary" type="number" placeholder="เงินเดือน" required />
-          <input className="input" name="wardIds" type="number" placeholder="แผนกที่รับผิดชอบ เช่น 1,2,3" required />
+          <input className="input" name="salary_scale" type="number" placeholder="เงินเดือน" required />
+          <input className="input" name="ward_id" type="number" placeholder="แผนกที่รับผิดชอบ เช่น 1,2,3" required />
         </div>
       </section>
 
@@ -59,11 +59,11 @@ export default function StaffForm() {
           >
             <select
               className="input"
-              value={row.degree}
-              name={'qualification[${index}].degree'}
+              value={row.qual_type}
+              name={'qualification[${index}].qual_type'}
               onChange={(e) => {
                 const newRows = [...educationRows];
-                newRows[index].degree = e.target.value;
+                newRows[index].qual_type = e.target.value;
                 setEducationRows(newRows);
               }}
             >
@@ -77,11 +77,11 @@ export default function StaffForm() {
             <input
               className="input text-amber-700"
               type="date"
-              value={row.date}
-              name={'qualification[${index}].date'}
+              value={row.qual_date}
+              name={'qualification[${index}].qual_date'}
               onChange={(e) => {
                 const newRows = [...educationRows];
-                newRows[index].date = e.target.value;
+                newRows[index].qual_date = e.target.value;
                 setEducationRows(newRows);
               }}
               required
@@ -112,7 +112,6 @@ export default function StaffForm() {
                 newRows[index].other = e.target.value;
                 setEducationRows(newRows);
               }}
-              required
             />
           </div>
         ))}
@@ -130,10 +129,10 @@ export default function StaffForm() {
       <section>
         <h2 className="text-lg font-semibold bg-cyan-100 p-2 rounded-t">ประสบการณ์ทำงาน</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          <input className="input" type="text" placeholder="ตำแหน่งงาน" required name="position"/>
-          <input className="input text-green-400" type="date" defaultValue="1990-01-23" required name="startDate" />
-          <input className="input text-red-400" type="date" defaultValue="1993-05-01" required name="endDate"/>
-          <input className="input md:col-span-3" type="text" placeholder="สถานที่ทำงาน" required name="organization"/>
+          <input className="input" type="text" placeholder="ตำแหน่งงาน"  name="position"/>
+          <input className="input text-green-400" type="date" defaultValue="1990-01-23"  name="start_date" />
+          <input className="input text-red-400" type="date" defaultValue="1993-05-01"  name="end_date"/>
+          <input className="input md:col-span-3" type="text" placeholder="สถานที่ทำงาน"  name="organization"/>
         </div>
       </section>
 

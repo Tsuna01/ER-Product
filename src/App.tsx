@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
-
 //component
 import StaffForm from "./component/StaffForm";
 import WardForm from "./component/WardForm";
@@ -12,7 +11,7 @@ import Fromdrug from "./component/Fromdrug";
 
 
 //Layout
-import LayoutLogin from "./layout/AuthLayout";
+import LayoutLogin from "./layout/LayoutLogin";
 import MainLayout from "./layout/MainLayout";
 import HomeLayout from "./layout/HomeLayout";
 
@@ -26,20 +25,20 @@ import Medication from "./page/Medication";
 
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
 
         <Route element={<LayoutLogin />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/auth/login" element={<Login />} />
         </Route>
 
         <Route element={<MainLayout />}>
-          <Route path="/Adminpanel" element={<AdminPanel />} />
           
           <Route path="/doctor/StaffForm" element={<StaffForm />} />
           <Route path="/doctor/WardForm" element={<WardForm />} />
-          <Route path="/doctor/StaffForm/:id" element={<Infostaff />} />
+          <Route path="/doctor/StaffInfo/:id" element={<Infostaff />} />
           
           {/* Employee Routes */}
           <Route path="/employee/D" element={<EmployeeD />} />
@@ -51,6 +50,7 @@ function App() {
         </Route>
 
         <Route element={<HomeLayout />}>
+          <Route path="/Adminpanel" element={<AdminPanel />} />
           <Route path="/doctor" element={<Doctor />} />
           <Route path="/employee" element={<Employee />} />
           <Route path="/medications" element={<Medication />} />

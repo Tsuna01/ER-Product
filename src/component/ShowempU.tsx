@@ -9,23 +9,48 @@ function ShowempU() {
             <option value="#">A2</option>
             <option value="#">B1</option>
             <option value="#">B2</option>
-        </select>
+        </select><br />
+        <h1 className="bold mb-5 text-lg text-gray-400 ">ตารางผู้ป่วยที่อยู่ในวอร์ด</h1>
       <table className="table-auto w-full border border-gray-300 rounded-md">
         <thead>
           <tr className="bg-gray-100 text-left">
-            <th className="border border-gray-300 px-4 py-2">ชื่อ - นามสกุล</th>
-            <th className="border border-gray-300 px-4 py-2">เลขบัตรประชาชน</th>
-            <th className="border border-gray-300 px-4 py-2">วันที่ส่งตัว</th>
-            <th className="border border-gray-300 px-4 py-2">หอผู้ป่วย</th>
+            <th className="border border-gray-300 px-4 py-2">Patient No.</th>
+            <th className="border border-gray-300 px-4 py-2">Name</th>
+            <th className="border border-gray-300 px-4 py-2">Data Placed</th>
+            <th className="border border-gray-300 px-4 py-2">Expected Leave</th>
+            <th className="border border-gray-300 px-4 py-2">Bed No.</th>
           </tr>
         </thead>
         <tbody>
             
           <tr>
-            <td className="border border-gray-300 px-4 py-2">สมรังศรี กักตัง</td>
-            <td className="border border-gray-300 px-4 py-2">9284102483712321</td>
+            <td className="border border-gray-300 px-4 py-2">P1002</td>
+            <td className="border border-gray-300 px-4 py-2">สมชาย ใจดี</td>
             <td className="border border-gray-300 px-4 py-2">31/07/2025</td>
-            <td className="border border-gray-300 px-4 py-2">ICU</td>
+            <td className="border border-gray-300 px-4 py-2">31/08/2025</td>
+            <td className="border border-gray-300 px-4 py-2">80</td>
+          </tr>
+        </tbody>
+      </table>
+              <h1 className="bold mb-5 mt-10 text-lg text-gray-400 ">ตารางผู้ป่วยที่รอเตียง</h1>
+      <table className="table-auto w-full border border-gray-300 rounded-md">
+        <thead>
+          <tr className="bg-gray-100 text-left">
+            <th className="border border-gray-300 px-4 py-2">Patient No.</th>
+            <th className="border border-gray-300 px-4 py-2">Name</th>
+            <th className="border border-gray-300 px-4 py-2">Data Placed</th>
+            <th className="border border-gray-300 px-4 py-2">Expected Leave</th>
+            <th className="border border-gray-300 px-4 py-2">Bed No.</th>
+          </tr>
+        </thead>
+        <tbody>
+            
+          <tr>
+            <td className="border border-gray-300 px-4 py-2">P1002</td>
+            <td className="border border-gray-300 px-4 py-2">สมชาย ใจดี</td>
+            <td className="border border-gray-300 px-4 py-2">31/08/2025</td>
+            <td className="border border-gray-300 px-4 py-2">31/09/2025</td>
+            <td className="border border-gray-300 px-4 py-2">80</td>
           </tr>
         </tbody>
       </table>

@@ -12,22 +12,27 @@ function Medication() {
       <table className="table-auto mx-70 mt-10 border border-gray-300 rounded-md">
         <thead>
           <tr className="bg-gray-100 text-left">
-            <th className="border border-gray-300 px-4 py-2">Patient No.</th>
+            <th className="border border-gray-300 px-4 py-2">Medication ID.</th>
+            <th className="border border-gray-300 px-4 py-2">Patient ID.</th>
             <th className="border border-gray-300 px-4 py-2">Name</th>
-            <th className="border border-gray-300 px-4 py-2">Date & Time</th>
-            <th className="border border-gray-300 px-4 py-2">Consultant</th>
-            <th className="border border-gray-300 px-4 py-2">clinic</th>
-            <th className="border border-gray-300 px-4 py-2">Medication</th>
+            <th className="border border-gray-300 px-4 py-2">Units Per Day</th>
+            <th className="border border-gray-300 px-4 py-2">Start Date</th>
+            <th className="border border-gray-300 px-4 py-2">End Date</th>
+            <th className="border border-gray-300 px-4 py-2">Prescribed By</th>
+            <th className="border border-gray-300 px-4 py-2">Details</th>
+
           </tr>
         </thead>
         <tbody>
             
           <tr>
+            <td className="border border-gray-300 px-4 py-2">1001</td>
             <td className="border border-gray-300 px-4 py-2">P10901</td>
             <td className="border border-gray-300 px-4 py-2">สมศรี รีตัง</td>
-            <td className="border border-gray-300 px-4 py-2">31/07/2025</td>
-            <td className="border border-gray-300 px-4 py-2">สมหมาย ใจดี</td>
-            <td className="border border-gray-300 px-4 py-2">คลินิคปีศาจ</td>
+            <td className="border border-gray-300 px-4 py-2">2</td>
+            <td className="border border-gray-300 px-4 py-2">1/02/2023</td>
+            <td className="border border-gray-300 px-4 py-2">28/02/2023</td>
+            <td className="border border-gray-300 px-4 py-2">สมชาย ใจดี</td>
             <td className="border border-gray-300 px-4 py-2"><Link to='#' className='text-black bg-green-500 p-[5px] rounded-lg hover:bg-red-600 hover:text-blue-800'>รายละเอียด</Link></td>
           </tr>
         </tbody>

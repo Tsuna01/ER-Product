@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, Outlet } from 'react-router-dom';
 import {
   Home,
   User,
@@ -23,6 +23,7 @@ const menuItems = [
 export default function SidebarMenu() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
+
   return (
     <div className={`bg-white border-2 border-gray-200 z-30 shadow-md transition-all fixed rounded-xl duration-300 ${isSidebarOpen ? 'w-64' : 'w-16'}`}>
       <div className="flex items-center justify-between p-4">
@@ -40,10 +41,10 @@ export default function SidebarMenu() {
         ))}
       </nav>
       <div className="p-4 border-t mt-auto">
-        <a href="#" className="flex items-center gap-2 text-red-600 hover:text-red-800">
+        <button className="flex items-center gap-2 text-red-600 hover:text-red-800">
           <LogOut className="w-5 h-5" />
           {isSidebarOpen && <span>ออกจากระบบ</span>}
-        </a>
+        </button>
       </div>
     </div>
   )

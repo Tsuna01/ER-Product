@@ -47,26 +47,33 @@ export default function WardForm() {
         แบบฟอร์มเวรพนักงานแผนก - SUT Hospital
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <input className="input" type="text" placeholder="เลขหน้า" />
-        <input className="input" type="date" />
-        <input className="input" type="text" placeholder="Ward Number" />
-        <input className="input" type="text" placeholder="Ward Name" />
-        <input className="input" type="text" placeholder="Location" />
-        <input className="input" type="text" placeholder="Charge Nurse" />
-        <input className="input" type="text" placeholder="Staff Number" />
-        <input className="input" type="text" placeholder="Tel Extn" />
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
+        <div className='flex flex-col justify-between md:flex-row'>
+          <input className="input" type="text" name='staff_as_id' placeholder="Staff AssignID" />
+          <input className="input" type="text" name='ward_id' placeholder="Ward ID" />
+          <input className="input" type="text" name='staff_id' placeholder="Staff ID" /></div>
+        <div>
+          <label htmlFor="">Start Date</label>
+          <input className="input" type="date" name='start_date' placeholder="Start Date" />
+          <label htmlFor="">End Date</label>
+          <input className="input" type="date" name='end_date' placeholder="End Date" />
+        </div>
+        <div>
+          <input className="input" type="text" name='shift_type' placeholder="Shift" />
+          <input className="input" type="text" name='role' placeholder="Role" />
+        </div>
       </div>
 
       {/* ตารางพนักงาน */}
       <table className="w-full border border-gray-300 mt-4">
         <thead className="bg-cyan-100 text-left">
           <tr>
-            <th className="border px-2 py-1">Staff No.</th>
+            <th className="border px-2 py-1">Ward ID.</th>
+            <th className="border px-2 py-1">Staff ID.</th>
             <th className="border px-2 py-1">Name</th>
-            <th className="border px-2 py-1">Address</th>
-            <th className="border px-2 py-1">Tel No.</th>
-            <th className="border px-2 py-1">Position</th>
+            <th className="border px-2 py-1">Start Date</th>
+            <th className="border px-2 py-1">End Date</th>
+            <th className="border px-2 py-1">Role</th>
             <th className="border px-2 py-1">Shift</th>
             <th className="border px-2 py-1 text-center">ลบ</th>
           </tr>
@@ -74,7 +81,7 @@ export default function WardForm() {
         <tbody>
           {staffRows.map((row, index) => (
             <tr key={index}>
-              {(['staffNo', 'name', 'address', 'tel', 'position', 'shift'] as (keyof StaffRow)[]).map((field) => (
+              {(['wardID', 'staffID', 'name', 'start date', 'end date', 'role', 'shift'] as (keyof StaffRow)[]).map((field) => (
                 <td key={field} className="border px-2 py-1">
                   <input
                     className="w-full border-none"

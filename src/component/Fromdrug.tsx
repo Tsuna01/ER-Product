@@ -1,39 +1,87 @@
-
 function Fromdrug() {
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-        <div className="border-2 border-gray-200 shadow-md max-w-7xl rounded-lg p-6 w-full flex justify-between mx-auto mt-10">
-            <h1 className="text-2xl font-bold">ฟอร์มการจ่ายยา</h1>
-            <p className="text-sm my-auto mr-5 text-gray-500">From</p>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      {/* Header */}
+      <div className="border-b border-gray-300 rounded-2xl mx-40 mt-5 bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+          <h1 className="text-2xl font-bold text-cyan-700">ฟอร์มการจ่ายยา</h1>
+          <p className="text-sm text-gray-500">ระบบบันทึกข้อมูลยา</p>
         </div>
-        <form action="" className="mx-60 mt-10">
-            <div className="w-[800px] mt-20 border-l-8 border-cyan-500 flex  ml-[80px]  ">
-                <h1 className="text-3xl text-cyan-800 ml-4 font-bold my-5">แบบฟอร์มการจ่ายยา</h1>
-                <div className="bg-white shadow-xl shadow-gray-400 rounded-2xl grid grid-cols-4 gap-4 h-auto p-8 absolute mt-[100px] w-[1000px]">
-                    <h1 className="text-md my-[10px]" >Patient</h1>
-                    <input type="text" className="input" name="patientName" />
-                    <h1 className="text-md my-[10px]" >DrugID</h1>
-                    <input type="date" id="date-time" className="input" name="date_time" />
-                    <h1 className="text-md my-[10px]" >MedicationID</h1>
-                    <input type="text" className="input" name="doctorName" />
-                    <h1 className="text-md my-[10px]" >ConsultantID</h1>
-                    <input type="text" className="input" name="clinicName" />
-                     <h1 className="text-md my-[10px]" >UnitsPerDay</h1>
-                    <input type="text" className="input" name="doctorName" />
-                    <h1 className="text-md my-[10px]" >Method</h1>
-                    <input type="text" className="input" name="clinicName" />
-                    <h1 className="text-md my-[10px]" >StartDate</h1>
-                    <input type="date" className="input" name="doctorName" />
-                    <h1 className="text-md my-[10px]" >FinishDate</h1>
-                    <input type="date" className="input" name="clinicName" />
-                    <button className="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium cursor-pointer rounded-lg text-sm px-5 py-2.5 text-center mt-10 ml-[40%] me-2 mb-2"
-                    >บันทึกข้อมูล</button>
-                </div>
-            </div>
-        </form>
+      </div>
+
+      {/* Form */}
+      <form className="max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-10">
+        <h2 className="text-2xl font-semibold text-cyan-600 border-l-4 border-cyan-500 pl-3 mb-8">
+          ข้อมูลการจ่ายยา
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Patient</label>
+            <input
+              type="text"
+              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              name="patient_id"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">DrugID</label>
+            <input
+              type="text"
+              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              name="item_id"
+            />
+          </div>
+        
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Prescribed By</label>
+            <input
+              type="text"
+              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              name="prescribed_by"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Units Per Day</label>
+            <input
+              type="number"
+              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              name="units_per_day"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <input
+              type="date"
+              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              name="start_date"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <input
+              type="date"
+              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+              name="end_date"
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-center mt-10">
+          <button
+            type="submit"
+            className="px-8 py-3 rounded-lg text-white font-medium bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 shadow-md transition-all duration-200"
+          >
+            💊 บันทึกข้อมูล
+          </button>
+        </div>
+      </form>
     </div>
-    
-  )
+  );
 }
 
-export default Fromdrug
+export default Fromdrug;

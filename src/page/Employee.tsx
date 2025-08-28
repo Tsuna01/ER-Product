@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 //component
 import ShowemlE from "../component/ShowemlE";
 import ShowempU from "../component/ShowempU";
-import ShowUpdate from "../component/ShowUpdate";
 
 function Employee() {
   const [isFirstView, setIsFirstView] = useState<boolean>(true);
@@ -33,13 +32,9 @@ function Employee() {
               <div className="bg-white shadow-xl p-2 rounded-2xl">
                 <button
                 onClick={() => handleFormSelect('ShowU')}
-                className="text-lg mx-2 hover:text-red-400 font-bold">รายงานผู้ป่วยนอกใน</button>
+                className="text-lg mx-2 hover:text-red-400 font-bold">รายงานผู้ป่วยใน</button>
               </div>
-              <div className="bg-white shadow-xl p-2 rounded-2xl">
-                <button
-                  onClick={() => handleFormSelect('ShowUpdate')}
-                  className="text-lg mx-4 hover:text-red-400 font-bold">อัพเดทการผู้ป่วย</button>
-              </div>
+
               <button
                 onClick={toggleView}
                 className="absolute ml-280  text-white text-lg font-bold bg-blue-500 p-2 rounded-xl cursor-pointer hover:bg-red-400"
@@ -53,7 +48,7 @@ function Employee() {
                 <Link to="/employee/D" className="text-lg mx-4 hover:text-red-400 font-bold ">แบบฟอร์มผู้ป่วยที่ได้รับการส่งตัว</Link>
               </div>
               <div className="bg-white shadow-xl p-2 rounded-2xl">
-                <Link to="/employee/E" className="text-lg mx-15 hover:text-red-400 font-bold">แบบฟอร์มผู้ป่วยนอก</Link>
+                <Link to="/employee/E" className="text-lg mx-15 hover:text-red-400 font-bold">แบบฟอร์มการนัดหมายผู้ป่วย</Link>
               </div>
               <div className="bg-white shadow-xl p-2 rounded-2xl">
                 <Link to="/employee/U" className="text-lg mx-15 hover:text-red-400 font-bold">แบบฟอร์มผู้ป่วยใน</Link>
@@ -71,7 +66,6 @@ function Employee() {
       <div className="ml-35 mt-10">
         {activeForm === "ShowE" && <ShowemlE />}
         {activeForm === "ShowU" && <ShowempU />}
-        {activeForm === "ShowUpdate" && <ShowUpdate />}
       </div>
 
     </div>
