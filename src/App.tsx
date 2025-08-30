@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Navigate, Route } from "react-router-dom";
 import './App.css'
 //component
 import StaffForm from "./component/StaffForm";
@@ -8,6 +8,8 @@ import EmployeeE from "./component/EmployeeE";
 import EmployeeU from "./component/EmployeeU";
 import Infostaff from "./component/Infostaff";
 import Fromdrug from "./component/Fromdrug";
+import QualiForm from "./component/QualiForm";
+import Workx from "./component/Workx";
 
 
 //Layout
@@ -31,15 +33,19 @@ function App() {
       <Routes>
 
         <Route element={<LayoutLogin />}>
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/auth/login" element={<Login />} />
         </Route>
 
         <Route element={<MainLayout />}>
-          
+
           <Route path="/doctor/StaffForm" element={<StaffForm />} />
           <Route path="/doctor/WardForm" element={<WardForm />} />
+          <Route path="/doctor/QualiForm" element={<QualiForm />} />
           <Route path="/doctor/StaffInfo/:id" element={<Infostaff />} />
-          
+          <Route path="/doctor/Workx" element={<Workx />} />
+
+
           {/* Employee Routes */}
           <Route path="/employee/D" element={<EmployeeD />} />
           <Route path="/employee/E" element={<EmployeeE />} />
