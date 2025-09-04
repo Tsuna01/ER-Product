@@ -33,8 +33,8 @@ function App() {
       <Routes>
 
         <Route element={<LayoutLogin />}>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/auth/login" element={<Login />} />
+          <Route path="/" element={<Navigate to="/auth/Login" replace />} />
+          <Route path="/auth/Login" element={<Login />} />
         </Route>
 
         <Route element={<MainLayout />}>

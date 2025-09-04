@@ -1,42 +1,61 @@
-import React, { useState } from 'react';
-
-interface StaffRow {
-  staffNo: string;
-  name: string;
-  address: string;
-  tel: string;
-  position: string;
-  shift: string;
-}
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function WardForm() {
-  const [staffRows, setStaffRows] = useState<StaffRow[]>([
-    { staffNo: '', name: '', address: '', tel: '', position: '', shift: '' },
-  ]);
-
-  const handleAddRow = () => {
-    setStaffRows([
-      ...staffRows,
-      { staffNo: '', name: '', address: '', tel: '', position: '', shift: '' },
-    ]);
+  const initialState = {
+    ward_id: '',
+    staff_id: '',
+    shift_type: '',
+    start_date: '',
+    end_date: '',
   };
 
-  const handleChange = (index: number, field: keyof StaffRow, value: string) => {
-    const updatedRows = [...staffRows];
-    updatedRows[index][field] = value;
-    setStaffRows(updatedRows);
+  const [ward, setWard] = useState(initialState);
+  const [infodata, setInfoData] = useState([]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setWard((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleRemoveRow = (index: number) => {
-    const updatedRows = staffRows.filter((_, i) => i !== index);
-    setStaffRows(updatedRows);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/doctor/WardForm");
+      setInfoData(response.data);
+      console.log("📦 ข้อมูลทั้งหมด:", response.data);
+    } catch (error) {
+      console.error("❌ ดึงข้อมูลไม่สำเร็จ:", error);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("ข้อมูลส่ง:", staffRows);
-    alert("บันทึกข้อมูลเรียบร้อย");
+
+    const payload = {
+      ...ward,
+      ward_id: Number(ward.ward_id),
+      staff_id: Number(ward.staff_id),
+    };
+
+    console.log("📤 ส่งข้อมูล:", JSON.stringify(payload, null, 2));
+
+    try {
+      const res = await axios.put("http://localhost:3000/doctor/WardForm", payload);
+      alert("✅ บันทึกข้อมูลเรียบร้อย");
+      console.log("✅ ตอบกลับจาก backend:", res.data);
+
+      setWard(initialState); // รีเซ็ตฟอร์ม
+      await fetchData(); // โหลดข้อมูลใหม่
+    } catch (err) {
+      console.error("❌ ERROR:", err);
+      alert("❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+    }
   };
+
+  // โหลดข้อมูลเมื่อ component เปิดครั้งแรก
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <form
@@ -47,82 +66,82 @@ export default function WardForm() {
         แบบฟอร์มเวรพนักงานแผนก - SUT Hospital
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
-        <div className='flex flex-col justify-between md:flex-row'>
-          <input className="input" type="text" name='staff_as_id' placeholder="Staff AssignID" />
-          <input className="input" type="text" name='ward_id' placeholder="Ward ID" />
-          <input className="input" type="text" name='staff_id' placeholder="Staff ID" /></div>
-        <div>
-          <label htmlFor="">Start Date</label>
-          <input className="input" type="date" name='start_date' placeholder="Start Date" />
-          <label htmlFor="">End Date</label>
-          <input className="input" type="date" name='end_date' placeholder="End Date" />
-        </div>
-        <div>
-          <input className="input" type="text" name='shift_type' placeholder="Shift" />
-          <input className="input" type="text" name='role' placeholder="Role" />
-        </div>
-      </div>
+      <input
+        className="input"
+        type="text"
+        name="ward_id"
+        placeholder="Ward ID"
+        value={ward.ward_id || ''}
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="input"
+        type="text"
+        name="staff_id"
+        placeholder="Staff ID"
+        value={ward.staff_id || ''}
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="input"
+        type="text"
+        name="shift_type"
+        placeholder="Shift (Early , Late , Night)"
+        value={ward.shift_type || ''}
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="input"
+        type="date"
+        name="start_date"
+        value={ward.start_date || ''}
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="input"
+        type="date"
+        name="end_date"
+        value={ward.end_date || ''}
+        onChange={handleChange}
+        required
+      />
 
-      {/* ตารางพนักงาน */}
-      <table className="w-full border border-gray-300 mt-4">
-        <thead className="bg-cyan-100 text-left">
-          <tr>
-            <th className="border px-2 py-1">Ward ID.</th>
-            <th className="border px-2 py-1">Staff ID.</th>
-            <th className="border px-2 py-1">Name</th>
-            <th className="border px-2 py-1">Start Date</th>
-            <th className="border px-2 py-1">End Date</th>
-            <th className="border px-2 py-1">Role</th>
-            <th className="border px-2 py-1">Shift</th>
-            <th className="border px-2 py-1 text-center">ลบ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {staffRows.map((row, index) => (
-            <tr key={index}>
-              {(['wardID', 'staffID', 'name', 'start date', 'end date', 'role', 'shift'] as (keyof StaffRow)[]).map((field) => (
-                <td key={field} className="border px-2 py-1">
-                  <input
-                    className="w-full border-none"
-                    placeholder={field}
-                    value={row[field]}
-                    onChange={(e) => handleChange(index, field, e.target.value)}
-                  />
-                </td>
-              ))}
-              <td className="border px-2 py-1 text-center">
-                {staffRows.length > 1 && (
-                  <button
-                    type="button"
-                    className="text-red-600 hover:underline"
-                    onClick={() => handleRemoveRow(index)}
-                  >
-                    ลบ
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* ปุ่ม */}
       <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
         <button
-          type="button"
-          onClick={handleAddRow}
-          className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded"
-        >
-          + เพิ่มแถวพนักงาน
-        </button>
-        <button
           type="submit"
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          className="bg-cyan-600 hover:bg-green-400 text-white px-4 mt-5 py-2 rounded"
         >
           บันทึกข้อมูล
         </button>
       </div>
+
+      {/* ตารางแสดงข้อมูล */}
+      <table className="table-auto mt-10 border border-gray-300 w-full rounded-md">
+        <thead>
+          <tr className="bg-gray-100 text-left">
+            <th className="border border-gray-300 px-4 py-2">Ward ID</th>
+            <th className="border border-gray-300 px-4 py-2">Staff ID</th>
+            <th className="border border-gray-300 px-4 py-2">Shift</th>
+            <th className="border border-gray-300 px-4 py-2">Start Date</th>
+            <th className="border border-gray-300 px-4 py-2">End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {infodata.map((item: any, id: number) => (
+            <tr key={id}>
+              <td className="border border-gray-300 px-4 py-2">{item.ward_id}</td>
+              <td className="border border-gray-300 px-4 py-2">{item.staff_id}</td>
+              <td className="border border-gray-300 px-4 py-2">{item.shift_type}</td>
+              <td className="border border-gray-300 px-4 py-2">{item.start_date}</td>
+              <td className="border border-gray-300 px-4 py-2">{item.end_date}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </form>
   );
 }

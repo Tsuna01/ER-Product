@@ -8,7 +8,7 @@ function HomeLayout() {
       <SidebarMenu />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        <main className="bg-gray-300 w-full h-full flex-1 p-6">
+        <main className="bg-customLG w-full h-full flex-1 p-6">
           <Outlet />
         </main>
       </div>

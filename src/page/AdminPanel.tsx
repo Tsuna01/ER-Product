@@ -5,8 +5,8 @@ export default function AdminPanel() {
       <div className="flex-1 flex flex-col">
         <main className="flex-1 p-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card title="จำนวนผู้ป่วย" value="145" color="text-blue-600" />
-            <Card title="หมอประจำการ" value="18" color="text-green-600" />
+            <Card title="จำนวนผู้ป่วย" value="3" color="text-blue-600" />
+            <Card title="หมอประจำการ" value="4" color="text-green-600" />
             <Card title="รายได้เดือนนี้" value="฿85,000" color="text-emerald-600" />
           </div>
         </main>

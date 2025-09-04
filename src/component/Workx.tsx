@@ -58,15 +58,15 @@ export default function Workx() {
 
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Field label="ชื่อหน่วยงาน/องค์กร">
-                            <input type="text" className="input" name="organization" required />
+                            <input type="text" className="input" name="organization"  />
                         </Field>
 
                         <Field label="ตำแหน่งงาน">
-                            <input type="text" className="input" name="position" required />
+                            <input type="text" className="input" name="position"  />
                         </Field>
 
                         <Field label="วันที่เริ่มงาน">
-                            <input type="date" className="input" name="start_date" required />
+                            <input type="date" className="input" name="start_date"  />
                         </Field>
 
                         <Field label="วันที่สิ้นสุดงาน">

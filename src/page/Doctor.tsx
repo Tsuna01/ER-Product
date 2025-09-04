@@ -50,7 +50,7 @@ function Doctor() {
                 )}
 
             </div>
-            <div className="bg-white shadow-xl grid grid-cols-4 gap-25 shadow-gray-400 p-5 rounded-2xl mt-10 ml-[230px] h-auto">
+            <div className="ml-60 mt-10 bg-white shadow-xl rounded-2xl shadow-gray-400 p-5">
                 <DoctorCard/>
             </div>
         </div>
