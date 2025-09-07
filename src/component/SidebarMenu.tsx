@@ -1,23 +1,21 @@
 import { useState } from 'react'
-import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Home,
   User,
   Stethoscope,
-  ArrowRightLeft,
   Pill,
-  DollarSign,
   LogOut,
   Menu,
+  SquarePlus,
 } from 'lucide-react'
 
 const menuItems = [
   { name: 'แดชบอร์ด', icon: Home , url : '/AdminPanel'},
   { name: 'ข้อมูลผู้ป่วย', icon: User , url : '/employee'},
   { name: 'ข้อมูลหมอ', icon: Stethoscope , url : '/doctor'},
-  { name: 'การเข้า/ออก', icon: ArrowRightLeft , url : '#'},
+  { name: 'ใบเบิก', icon: SquarePlus , url : '/supplier'},
   { name: 'การจ่ายยา', icon: Pill , url : '/medications' },
-  { name: 'การเงิน', icon: DollarSign , url : '#' },
 ]
 
 export default function SidebarMenu() {

@@ -95,7 +95,7 @@ export default function WardForm() {
       />
       <input
         className="input"
-        type="date"
+        type="datetime-local"
         name="start_date"
         value={ward.start_date || ''}
         onChange={handleChange}
@@ -103,7 +103,7 @@ export default function WardForm() {
       />
       <input
         className="input"
-        type="date"
+        type="datetime-local"
         name="end_date"
         value={ward.end_date || ''}
         onChange={handleChange}

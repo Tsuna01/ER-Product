@@ -10,6 +10,8 @@ import Infostaff from "./component/Infostaff";
 import Fromdrug from "./component/Fromdrug";
 import QualiForm from "./component/QualiForm";
 import Workx from "./component/Workx";
+import NumericInput from "./component/NumericInput";
+import SupplierForm from "./component/SupplierForm";
 
 
 //Layout
@@ -24,6 +26,7 @@ import AdminPanel from "./page/AdminPanel";
 import Doctor from "./page/Doctor";
 import Employee from "./page/Employee";
 import Medication from "./page/Medication";
+import Suppliers from "./page/Suppliers";
 
 
 function App() {
@@ -53,13 +56,21 @@ function App() {
 
           {/* From Drug */}
           <Route path="/medications/from" element={<Fromdrug />} />
-        </Route>
+
+
+          <Route path="/supplier/NumericInput" element={<NumericInput />} />
+          <Route path="/supplier/SupplierForm" element={<SupplierForm />} />
+
+          </Route>
+
 
         <Route element={<HomeLayout />}>
           <Route path="/Adminpanel" element={<AdminPanel />} />
           <Route path="/doctor" element={<Doctor />} />
           <Route path="/employee" element={<Employee />} />
           <Route path="/medications" element={<Medication />} />
+          <Route path="/supplier" element={<Suppliers/>}/>
+          
 
         </Route>
 

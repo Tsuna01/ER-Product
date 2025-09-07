@@ -1,4 +1,60 @@
+import React, { useState } from "react";
+import axios from "axios";
+
 function Fromdrug() {
+  const [formData, setFormData] = useState({
+    patient_id: "",
+    item_id: "",
+    prescribed_by: "",
+    units_per_day: "",
+    start_date: "",
+    end_date: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // ตรวจสอบค่าก่อนส่ง
+    if (
+      !formData.patient_id ||
+      !formData.item_id ||
+      !formData.prescribed_by ||
+      !formData.units_per_day ||
+      !formData.start_date ||
+      !formData.end_date
+    ) {
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+    try {
+      await axios.post("http://localhost:3000/medications/from", {
+        ...formData,
+        patient_id: Number(formData.patient_id),
+        item_id: Number(formData.item_id),
+        units_per_day: Number(formData.units_per_day),
+      });
+      alert("💊 บันทึกข้อมูลสำเร็จ");
+      setFormData({
+        patient_id: "",
+        item_id: "",
+        prescribed_by: "",
+        units_per_day: "",
+        start_date: "",
+        end_date: "",
+      });
+    } catch (err) {
+      console.error("❌ Error:", err);
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
@@ -10,65 +66,38 @@ function Fromdrug() {
       </div>
 
       {/* Form */}
-      <form className="max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-10">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-5xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-10"
+      >
         <h2 className="text-2xl font-semibold text-cyan-600 border-l-4 border-cyan-500 pl-3 mb-8">
           ข้อมูลการจ่ายยา
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Patient</label>
-            <input
-              type="text"
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-              name="patient_id"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">DrugID</label>
-            <input
-              type="text"
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-              name="item_id"
-            />
-          </div>
-        
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Prescribed By</label>
-            <input
-              type="text"
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-              name="prescribed_by"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Units Per Day</label>
-            <input
-              type="number"
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-              name="units_per_day"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-            <input
-              type="date"
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-              name="start_date"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-            <input
-              type="date"
-              className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
-              name="end_date"
-            />
-          </div>
+          {[
+            { label: "Patient", name: "patient_id", type: "text" },
+            { label: "DrugID", name: "item_id", type: "text" },
+            { label: "Prescribed By", name: "prescribed_by", type: "text" },
+            { label: "Units Per Day", name: "units_per_day", type: "number" },
+            { label: "Start Date", name: "start_date", type: "date" },
+            { label: "End Date", name: "end_date", type: "date" },
+          ].map((field) => (
+            <div key={field.name}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {field.label}
+              </label>
+              <input
+                type={field.type}
+                name={field.name}
+                placeholder={field.name == 'prescribed_by' ? 'Staff ID' : ''}
+                value={(formData as any)[field.name]}
+                onChange={handleChange}
+                className="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+                required
+              />
+            </div>
+          ))}
         </div>
 
         <div className="flex justify-center mt-10">

@@ -22,19 +22,13 @@ function EmployeeD() {
         address_line: data.address_line,
         phone: data.phone,
         date_registered: data.date_registerd || null,
+        clinic_no: data.clinic_no || null
       },
       kin: {
         kin_name: data.kin_name,
         kin_relationship: data.kin_relationship,
         kin_address_line: data.kin_address_line,
         kin_phone: data.kin_phone,
-      },
-      doctor: {
-        clinic_no: data.clinic_no || null,
-        doctor_name: data.doctor_name,
-        lo_last_name: data.lo_last_name,
-        lo_address_line: data.lo_address_line,
-        lo_phone: data.lo_phone,
       },
     };
 
@@ -124,11 +118,12 @@ function EmployeeD() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <select name="clinic_no" className="input">
                 <option value="">เลือกหมายเลขคลินิก</option>
-                <option value="C01">C01</option>
-                <option value="C02">C02</option>
-                <option value="C03">C03</option>
-                <option value="C04">C04</option>
-                <option value="C05">C05</option>
+                <option value="0">ไม่มีแพทย์ส่วนตัว</option>
+                <option value="1">C01</option>
+                <option value="2">C02</option>
+                <option value="3">C03</option>
+                <option value="4">C04</option>
+                <option value="5">C05</option>
               </select>
               <input type="text" className="input" placeholder="ชื่อแพทย์" name="doctor_name" />
               <input type="text" className="input" placeholder="สกุลแพทย์" name="lo_last_name" />
