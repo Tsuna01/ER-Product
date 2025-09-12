@@ -79,7 +79,22 @@ export default function StaffForm() {
           <h2 className="text-lg font-semibold text-cyan-800">ตำแหน่งงาน</h2>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
             <Field label="ตำแหน่งงาน">
-              <input className="input" name="position" type="text" required />
+              <select name="position" id="" className="input" required>
+                <option value="">---------</option>
+                <option value="HR_Officer">HR Officer</option>
+                <option value="HR_Manager">HR Manager</option>
+                <option value="Doctor_General">Doctor General</option>
+                <option value="Doctor_Specialist">Doctor Specialist</option>
+                <option value="Surgeon">Surgeon</option>
+                <option value="Resident">Resident</option>
+                <option value="Nurse_Staff">Nurse Staff</option>
+                <option value="Nurse_Charge">Nurse Charge</option>
+                <option value="Nurse_Assistant">Nurse Assistant</option>
+                <option value="Pharmacist">Pharmacist</option>
+                <option value="Supply_Officer">Supply Officer</option>
+                <option value="Medical_Director">Medical Director</option>
+                <option value="Hospital_Director">Hospital Director</option>
+              </select>
             </Field>
             <Field label="ระดับขั้นเงินเดือน">
               <select className="input" name="salary_scale" required>

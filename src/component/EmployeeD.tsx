@@ -117,7 +117,7 @@ function EmployeeD() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <select name="clinic_no" className="input">
-                <option value="">เลือกหมายเลขคลินิก</option>
+                <option value="0">เลือกหมายเลขคลินิก</option>
                 <option value="0">ไม่มีแพทย์ส่วนตัว</option>
                 <option value="1">C01</option>
                 <option value="2">C02</option>

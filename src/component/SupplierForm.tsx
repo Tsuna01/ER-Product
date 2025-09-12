@@ -21,12 +21,12 @@ export default function SupplierForm() {
     const payload = {
       supplier_name: supplierName.trim(),
       phone: supplierPhone.trim(),
-      address: supplierAddress.trim(),
+      address_line: supplierAddress.trim(),
       fax: supplierFax.trim(),
     };
 
     try {
-      await axios.post(`http://localhost:3000/supplier/create`, payload);
+      await axios.post(`http://localhost:3000/supplier/SupplierForm`, payload);
       alert("บันทึกข้อมูลผู้จัดจำหน่ายสำเร็จ ✨");
 
       // เคลียร์ฟอร์มหลังจากบันทึกสำเร็จ
@@ -62,6 +62,7 @@ export default function SupplierForm() {
             <input
               className="input"
               type="text"
+              name="supplier_name"
               value={supplierName}
               onChange={(e) => setSupplierName(e.target.value)}
               required
@@ -73,6 +74,7 @@ export default function SupplierForm() {
             <input
               className="input"
               type="text"
+              name="address_line"
               value={supplierAddress}
               onChange={(e) => setSupplierAddress(e.target.value)}
             />
@@ -83,6 +85,7 @@ export default function SupplierForm() {
             <input
               className="input"
               type="tel"
+              name="phone"
               value={supplierPhone}
               onChange={(e) => setSupplierPhone(e.target.value)}
             />
@@ -93,6 +96,7 @@ export default function SupplierForm() {
             <input
               className="input"
               type="text"
+              name="fax"
               value={supplierFax}
               onChange={(e) => setSupplierFax(e.target.value)}
             />

@@ -20,9 +20,7 @@ function Doctor() {
                         <div className="items-center text-2xl ml-10  font-bold text-cyan-800">
                             <h1>รายชื่อบุคคลากรทางการแพทย์</h1>
                         </div>
-                        <div className="ml-130 border-blue-200 border-2 rounded-lg">
-                            <input type="text" className="input" />
-                            <button className=" absolute text-white text-lg bg-blue-500 p-2 ml-5 rounded-xl cursor-pointer hover:bg-green-500 ">Search</button>
+                        <div className="ml-185 mb-10 border-blue-200 border-2 rounded-lg">
                             <button
                                 onClick={toggleView}
                                 className=" absolute text-white font-bold text-lg bg-blue-500 p-2 ml-25 rounded-xl cursor-pointer hover:bg-green-500 
@@ -35,15 +33,15 @@ function Doctor() {
                             <h1>รายชื่อบุคคลากรทางการแพทย์</h1>
                         </div>
                         <div className="ml-130 rounded-lg">
-                            <Link to='/doctor/StaffForm' className='mr-5 p-2 border-white shadow-xl rounded-2xl hover:bg-green-500 hover:text-white hover:border-green-300'>
-                            <span className="">StaffForm</span>
+                            <Link to='/doctor/StaffForm' className='mr-5 p-2 hover:p-3 mt-[-20px] bg-white absolute rounded-lg shadow-xl shadow-gray-200 font-bold  hover:bg-blue-500 hover:text-white '>
+                            <span className="">Staff Form</span>
                             </Link>
-                            <Link to='/doctor/WardForm' className='mr-5 p-2 border-white shadow-xl rounded-2xl hover:bg-green-500 hover:text-white hover:border-green-300'>
-                            <span className="">WardForm</span>
+                            <Link to='/doctor/WardForm' className='mr-5 p-2 hover:p-3 ml-35 mt-[-20px] bg-white absolute  rounded-lg shadow-xl shadow-gray-200 font-bold  hover:bg-blue-500 hover:text-white'>
+                            <span className="">Staff Assign</span>
                             </Link>
                             <button
                                 onClick={toggleView}
-                                className=" absolute text-white text-lg font-bold bg-blue-500 p-2 ml-30 mt-[-10px] rounded-xl cursor-pointer hover:bg-red-400 
+                                className=" absolute text-white text-lg font-bold bg-blue-500 p-2 ml-85 mt-[-20px] rounded-xl cursor-pointer hover:bg-red-400 
                             ">สลับ</button>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 //component
 import ShowemlE from "../component/ShowemlE";
 import ShowempU from "../component/ShowempU";
+import Showwaitinglist from "../component/Showwaitinglist";
 
 function Employee() {
   const [isFirstView, setIsFirstView] = useState<boolean>(true);
@@ -14,7 +15,7 @@ function Employee() {
     setIsFirstView(prev => !prev);
   };
 
-  const handleFormSelect = (props) => {
+  const handleFormSelect = (props:any) => {
     setActiveForm(props);
   };
 
@@ -34,6 +35,11 @@ function Employee() {
                 onClick={() => handleFormSelect('ShowU')}
                 className="text-lg mx-2 hover:text-red-400 font-bold">รายงานผู้ป่วยใน</button>
               </div>
+              <div className="bg-white shadow-xl p-2 rounded-2xl">
+                <button
+                onClick={() => handleFormSelect('waitinglist')}
+                className="text-lg mx-2 hover:text-red-400 font-bold">รายงานผู้ป่วยรอเตียง</button>
+              </div>
 
               <button
                 onClick={toggleView}
@@ -45,13 +51,16 @@ function Employee() {
           ) : (
             <>
               <div className="bg-white shadow-xl p-2 rounded-2xl">
-                <Link to="/employee/D" className="text-lg mx-4 hover:text-red-400 font-bold ">แบบฟอร์มผู้ป่วยที่ได้รับการส่งตัว</Link>
+                <Link to="/employee/D" className="text-lg mx-2 hover:text-red-400 font-bold ">แบบฟอร์มผู้ป่วยที่ได้รับการส่งตัว</Link>
               </div>
               <div className="bg-white shadow-xl p-2 rounded-2xl">
-                <Link to="/employee/E" className="text-lg mx-15 hover:text-red-400 font-bold">แบบฟอร์มการนัดหมายผู้ป่วย</Link>
+                <Link to="/employee/E" className="text-lg mx-2 hover:text-red-400 font-bold">แบบฟอร์มการนัดหมายผู้ป่วย</Link>
               </div>
-              <div className="bg-white shadow-xl p-2 rounded-2xl">
-                <Link to="/employee/U" className="text-lg mx-15 hover:text-red-400 font-bold">แบบฟอร์มผู้ป่วยใน</Link>
+              <div className="bg-white shadow-xl p-2 w-45 rounded-2xl">
+                <Link to="/employee/U" className="text-lg mx-2 hover:text-red-400 font-bold">แบบฟอร์มผู้ป่วยใน</Link>
+              </div>
+              <div className="bg-white shadow-xl p-2 w-55 absolute ml-210 rounded-2xl">
+                <Link to="/employee/W" className="text-lg mx-2 hover:text-red-400 font-bold">แบบฟอร์มผู้ป่วยรอเตียง</Link>
               </div>
               <button
                 onClick={toggleView}
@@ -63,9 +72,10 @@ function Employee() {
           )}
         </div>
       </div>
-      <div className="ml-35 mt-10">
+      <div className="ml-60 mt-10">
         {activeForm === "ShowE" && <ShowemlE />}
         {activeForm === "ShowU" && <ShowempU />}
+        {activeForm === "waitinglist" && <Showwaitinglist />}
       </div>
 
     </div>

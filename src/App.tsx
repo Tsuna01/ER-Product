@@ -12,6 +12,7 @@ import QualiForm from "./component/QualiForm";
 import Workx from "./component/Workx";
 import NumericInput from "./component/NumericInput";
 import SupplierForm from "./component/SupplierForm";
+import EmployeeW from "./component/EmployeeW";
 
 
 //Layout
@@ -53,6 +54,7 @@ function App() {
           <Route path="/employee/D" element={<EmployeeD />} />
           <Route path="/employee/E" element={<EmployeeE />} />
           <Route path="/employee/U" element={<EmployeeU />} />
+          <Route path="/employee/W" element={<EmployeeW />} />
 
           {/* From Drug */}
           <Route path="/medications/from" element={<Fromdrug />} />

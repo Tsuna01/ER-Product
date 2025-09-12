@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
@@ -14,9 +15,9 @@ export default function Login() {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await axios.post(`http://localhost:3000/auth/refresh`, {}, { withCredentials: true });
+        const res = await axios.post(`http://localhost:3000/auth/login`, {}, { withCredentials: true });
         localStorage.setItem("token", res.data.access_token);
-        window.location.href = "/dashboard"; // ข้ามหน้า login ถ้ามี session
+        window.location.href = "/Adminpanel"; // ข้ามหน้า login ถ้ามี session
       } catch {
         // ไม่มี token หรือหมดอายุ → ให้ login ปกติ
       }
@@ -108,7 +109,7 @@ export default function Login() {
           </button>
 
           <p className="text-center text-sm text-gray-500">
-            ยังไม่มีบัญชี? <a className="text-cyan-700 hover:underline" href="#">ติดต่อผู้ดูแล</a>
+            ยังไม่มีบัญชี? <Link className="text-cyan-700 hover:underline" to="#">ติดต่อผู้ดูแล</Link>
           </p>
         </form>
       </div>

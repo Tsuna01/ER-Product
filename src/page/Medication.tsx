@@ -37,31 +37,31 @@ function Medication() {
       </div>
 
       {/* Table */}
-      <div className=" bg-white py-5 mt-10 mx-10  shadow-2xl rounded-4xl">
-      <table className="table-auto shadow-2xl mx-auto m-10 border border-gray-300 w-[90%]">
+      <div className=" bg-white rounded-2xl shadow-md mx-auto mt-10 ring-1 ring-gray-200 p-6 w-[80%]">
+      <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
         <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="border px-4 py-2">Patient ID</th>
-            <th className="border px-4 py-2">Patient Name</th>
-            <th className="border px-4 py-2">Drug Name</th>
-            <th className="border px-4 py-2">Units Per Day</th>
-            <th className="border px-4 py-2">Start Date</th>
-            <th className="border px-4 py-2">End Date</th>
-            <th className="border px-4 py-2">Prescribed By</th>
-            <th className="border px-4 py-2">Details</th>
+          <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+            <th className="px-6 py-3 text-sm font-semibold">Patient ID</th>
+            <th className="px-6 py-3 text-sm font-semibold">Patient Name</th>
+            <th className="px-6 py-3 text-sm font-semibold">Drug Name</th>
+            <th className="px-6 py-3 text-sm font-semibold">Units Per Day</th>
+            <th className="px-6 py-3 text-sm font-semibold">Start Date</th>
+            <th className="px-6 py-3 text-sm font-semibold">End Date</th>
+            <th className="px-6 py-3 text-sm font-semibold">Prescribed By</th>
+            <th className="px-6 py-3 text-sm font-semibold">Details</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-200">
           {data.map((row: any, id) => (
-            <tr key={id}>
-              <td className="border px-4 py-2">{row.patient_id}</td>
-              <td className="border px-4 py-2">{row.name}</td>
-              <td className="border px-4 py-2">{row.item_name}</td>
-              <td className="border px-4 py-2">{row.units_per_day}</td>
-              <td className="border px-4 py-2">{row.start_date}</td>
-              <td className="border px-4 py-2">{row.end_date}</td>
-              <td className="border px-4 py-2">{row.prescribed_by}</td>
-              <td className="border">
+            <tr key={id} className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+              <td className="px-6 py-3 text-gray-700">{row.patient_id}</td>
+              <td className="px-6 py-3 text-gray-700">{row.name}</td>
+              <td className="px-6 py-3 text-gray-700">{row.item_name}</td>
+              <td className="px-6 py-3 text-gray-700">{row.units_per_day}</td>
+              <td className="px-6 py-3 text-gray-700">{row.start_date}</td>
+              <td className="px-6 py-3 text-gray-700">{row.end_date}</td>
+              <td className="px-6 py-3 text-gray-700">{row.prescribed_by}</td>
+              <td className="px-6 py-3 text-gray-700">
                 <Link
                   to={`/medications/${row.medication_id}`}
                   className="text-white bg-green-500 m-auto justify-center flex rounded-lg hover:bg-red-600 hover:text-blue-800"
@@ -72,6 +72,38 @@ function Medication() {
             </tr>
           ))}
         </tbody>
+        {/* <section className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
+          <h1 className="font-bold mb-5 text-xl text-cyan-700">รายงานการเบิก</h1>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+              <thead>
+                <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+                  <th className="px-6 py-3 text-sm font-semibold">Ward ID</th>
+                  <th className="px-6 py-3 text-sm font-semibold">เบิกโดย Staff ID</th>
+                  <th className="px-6 py-3 text-sm font-semibold">อนุมัติโดย Staff ID</th>
+                  <th className="px-6 py-3 text-sm font-semibold">วันที่เบิก</th>
+                  <th className="px-6 py-3 text-sm font-semibold">Name Items</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                <tr className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                  <td className="px-6 py-3 text-gray-700">001</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-12</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-01</td>
+                  <td className="px-6 py-3 text-gray-700">2025-09-09</td>
+                  <td className="px-6 py-3 text-gray-700">Gloves, Masks</td>
+                </tr>
+                <tr className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                  <td className="px-6 py-3 text-gray-700">002</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-33</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-05</td>
+                  <td className="px-6 py-3 text-gray-700">2025-09-08</td>
+                  <td className="px-6 py-3 text-gray-700">Syringe</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section> */}
       </table>
       </div>
     </div>

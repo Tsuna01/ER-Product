@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import { User2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 function EmployeeE() {
   const navigate = useNavigate();
+  const [data, setData] = useState<any>([]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,12 +29,24 @@ function EmployeeE() {
       await axios.post("http://localhost:3000/employee/E", payload);
 
       alert("✅ บันทึกข้อมูลสำเร็จ");
-      navigate("/Adminpanel");
     } catch (err) {
       console.error("❌ Error:", err);
       alert("❌ บันทึกข้อมูลล้มเหลว");
     }
   };
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/employee/E/info')
+      .then(response => {
+        console.log("📦 ได้ข้อมูล:", response.data);
+        setData(response.data);
+      })
+
+      .catch(error => {
+        console.error('There was an error fetching the doctor data!', error);
+      });
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b mx-auto my-auto from-cyan-50 via-white to-cyan-50 py-12 px-4">
@@ -122,6 +136,28 @@ function EmployeeE() {
             </button>
           </div>
         </form>
+
+
+        <table className="min-w-full border-collapse mt-5 rounded-lg overflow-hidden shadow-sm">
+          <thead>
+            <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+              <th className="px-6 py-3 text-sm font-semibold">Patient ID</th>
+              <th className="px-6 py-3 text-sm font-semibold">Name</th>
+              <th className="px-6 py-3 text-sm font-semibold">Date Register</th>
+              <th className="px-6 py-3 text-sm font-semibold">Gender</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {data.map((row: any) => (
+              <tr key={row.patient_id}>
+                <td className="px-6 py-3 text-gray-700">{row.patient_id}</td>
+                <td className="px-6 py-3 text-gray-700">{row.name}</td>
+                <td className="px-6 py-3 text-gray-700">{row.date_registered}</td>
+                <td className="px-6 py-3 text-gray-700">{row.gender}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </motion.section>
     </div>
   );

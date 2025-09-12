@@ -31,6 +31,7 @@ export default function RequisitionForm() {
   const [requestedBy, setRequestedBy] = useState("");
   const [approvedBy, setApprovedBy] = useState("");
   const [requestDate, setRequestDate] = useState("");
+  const [data, setData] = useState(false)
 
   // ----- Items state -----
   const [items, setItems] = useState<ReqItem[]>([
@@ -55,6 +56,10 @@ export default function RequisitionForm() {
     () => items.reduce((sum, it) => sum + toNumber(it.quantity) * toNumber(it.unit_price), 0),
     [items]
   );
+
+  const handleData = () => {
+    setData(!data);
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,7 +89,7 @@ export default function RequisitionForm() {
     };
 
     try {
-      await axios.post(`http://localhost:3000/inventory/requisitions`, payload);
+      await axios.post(`http://localhost:3000/supplier/NumericInput`, payload);
       alert("บันทึกใบเบิกสำเร็จ ✨");
       navigate(-1);
     } catch (err) {
@@ -122,6 +127,8 @@ export default function RequisitionForm() {
               <input
                 className="input"
                 type="number"
+                name="ward_id"
+                placeholder="Ward Number"
                 min={1}
                 value={wardId}
                 onChange={(e) => setWardId(e.target.value)}
@@ -132,6 +139,8 @@ export default function RequisitionForm() {
               <input
                 className="input"
                 type="text"
+                name="requested_by"
+                placeholder="Staff ID"
                 value={requestedBy}
                 onChange={(e) => setRequestedBy(e.target.value)}
                 required
@@ -141,6 +150,8 @@ export default function RequisitionForm() {
               <input
                 className="input"
                 type="text"
+                name="approved_by"
+                placeholder="Staff ID"
                 value={approvedBy}
                 onChange={(e) => setApprovedBy(e.target.value)}
                 required
@@ -150,6 +161,7 @@ export default function RequisitionForm() {
               <input
                 className="input"
                 type="date"
+                name="date_ordered"
                 value={requestDate}
                 onChange={(e) => setRequestDate(e.target.value)}
                 required
@@ -181,6 +193,7 @@ export default function RequisitionForm() {
                       <input
                         className="input"
                         type="text"
+                        name="item_id"
                         value={it.item_id}
                         onChange={(e) => updateItem(it.id, { item_id: e.target.value })}
                         required
@@ -194,6 +207,7 @@ export default function RequisitionForm() {
                         className="input"
                         type="number"
                         inputMode="numeric"
+                        name="quantity"
                         min={0}
                         step={1}
                         value={it.quantity}
@@ -209,6 +223,7 @@ export default function RequisitionForm() {
                         className="input"
                         type="number"
                         inputMode="decimal"
+                        name="cost_per_unit"
                         min={0}
                         step="0.01"
                         value={it.unit_price}
@@ -246,6 +261,43 @@ export default function RequisitionForm() {
             </div>
           </div>
         </section>
+
+
+
+        {data ? (<section className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
+          <h1 className="font-bold mb-5 text-xl text-cyan-700">รายงานการเบิก</h1>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+              <thead>
+                <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+                  <th className="px-6 py-3 text-sm font-semibold">Ward ID</th>
+                  <th className="px-6 py-3 text-sm font-semibold">เบิกโดย Staff ID</th>
+                  <th className="px-6 py-3 text-sm font-semibold">อนุมัติโดย Staff ID</th>
+                  <th className="px-6 py-3 text-sm font-semibold">วันที่เบิก</th>
+                  <th className="px-6 py-3 text-sm font-semibold">Name Items</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                <tr className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                  <td className="px-6 py-3 text-gray-700">001</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-12</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-01</td>
+                  <td className="px-6 py-3 text-gray-700">2025-09-09</td>
+                  <td className="px-6 py-3 text-gray-700">Gloves, Masks</td>
+                </tr>
+                <tr className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                  <td className="px-6 py-3 text-gray-700">002</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-33</td>
+                  <td className="px-6 py-3 text-gray-700">Staff-05</td>
+                  <td className="px-6 py-3 text-gray-700">2025-09-08</td>
+                  <td className="px-6 py-3 text-gray-700">Syringe</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>) : ''}
+
+
       </div>
 
       {/* Sticky action bar */}
@@ -256,6 +308,13 @@ export default function RequisitionForm() {
               ตรวจสอบความถูกต้องก่อนบันทึกข้อมูล
             </p>
             <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleData}
+                className="rounded-xl px-5 py-2.5 bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white font-medium shadow hover:brightness-110 active:scale-[.99]"
+              >
+                รายงาน
+              </button>
               <button
                 type="reset"
                 onClick={resetForm}

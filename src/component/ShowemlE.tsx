@@ -20,26 +20,26 @@ function ShowemlE() {
   console.log(data);
 
   return (
-    <div className="bg-white shadow-xl shadow-gray-400 rounded-xl ml-24 p-10">
-      <h1 className="text-xl text-gray-400 my-[10px]">ตารางผู้ป่วยนอก</h1>
-      <table className="table-auto mt-10 border border-gray-300 w-full rounded-md">
+    <div className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
+      <h1 className="font-bold mb-5 text-xl text-cyan-700">ตารางผู้ป่วยนอก</h1>
+      <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
         <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="border border-gray-300 px-4 py-2">Patient ID</th>
-            <th className="border border-gray-300 px-4 py-2">Name</th>
-            <th className="border border-gray-300 px-4 py-2">purpose</th>
-            <th className="border border-gray-300 px-4 py-2">Clinic No</th>
-            <th className="border border-gray-300 px-4 py-2">Details</th>
+          <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+            <th className="px-6 py-3 text-sm font-semibold">Patient ID</th>
+            <th className="px-6 py-3 text-sm font-semibold">Name</th>
+            <th className="px-6 py-3 text-sm font-semibold">purpose</th>
+            <th className="px-6 py-3 text-sm font-semibold">Clinic No</th>
+            <th className="px-6 py-3 text-sm font-semibold">Details</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-gray-200">
           {data.map((info: any, id: number) => (
             <tr key={id}>
-              <td className="border border-gray-300 px-4 py-2">{info.patient_id}</td>
-              <td className="border border-gray-300 px-4 py-2">{info.name}</td>
-              <td className="border border-gray-300 px-4 py-2">{info.purpose}</td>
-              <td className="border border-gray-300 px-4 py-2">{info.clinic_no}</td>
-              <td className="border border-gray-300 px-4 py-2">
+              <td className="px-6 py-3 text-gray-700">{info.patient_id}</td>
+              <td className="px-6 py-3 text-gray-700">{info.name}</td>
+              <td className="px-6 py-3 text-gray-700">{info.purpose}</td>
+              <td className="px-6 py-3 text-gray-700">{info.clinic_no}</td>
+              <td className="px-6 py-3 text-gray-700">
                 <Link
                   to={`/employee/details/${info.patient_id}`}
                   className="text-black bg-green-500 p-[5px] rounded-lg hover:bg-red-600 hover:text-blue-800"
@@ -47,6 +47,7 @@ function ShowemlE() {
                   รายละเอียด
                 </Link>
               </td>
+              
             </tr>
           ))}
         </tbody>
