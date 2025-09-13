@@ -63,7 +63,7 @@ function Medication() {
               <td className="px-6 py-3 text-gray-700">{row.prescribed_by}</td>
               <td className="px-6 py-3 text-gray-700">
                 <Link
-                  to={`/medications/${row.medication_id}`}
+                  to={`/medications/info/${row.medication_id}`}
                   className="text-white bg-green-500 m-auto justify-center flex rounded-lg hover:bg-red-600 hover:text-blue-800"
                 >
                   เพิ่มเติม

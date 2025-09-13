@@ -13,6 +13,8 @@ import Workx from "./component/Workx";
 import NumericInput from "./component/NumericInput";
 import SupplierForm from "./component/SupplierForm";
 import EmployeeW from "./component/EmployeeW";
+import Infopatient from "./component/Infopatient";
+import Infomedication from "./component/Infomedication";
 
 
 //Layout
@@ -55,9 +57,11 @@ function App() {
           <Route path="/employee/E" element={<EmployeeE />} />
           <Route path="/employee/U" element={<EmployeeU />} />
           <Route path="/employee/W" element={<EmployeeW />} />
+          <Route path="/employee/Infopatient/:id" element={<Infopatient />} />
 
           {/* From Drug */}
           <Route path="/medications/from" element={<Fromdrug />} />
+          <Route path="/medications/info/:id" element={<Infomedication />} />
 
 
           <Route path="/supplier/NumericInput" element={<NumericInput />} />

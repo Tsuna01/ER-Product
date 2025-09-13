@@ -1,12 +1,29 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 type ReqItem = {
   id: string;
-  item_id: string;     // อนุญาตเป็นรหัสหรือเลขก็ได้ (ส่งออกค่อยแปลง)
-  quantity: string;    // เก็บสตริงระหว่างพิมพ์
-  unit_price: string;  // เก็บสตริงระหว่างพิมพ์
+  item_id: number;     // ใช้เป็น number จริง
+  quantity: string;    // คุม input แบบ string
+  unit_price: string;  // คุม input แบบ string
+};
+
+type InfoRow = {
+  id: number;
+  name: string;
+  item_type: string;
+  quantity_in_stock: number;
+  cost_per_unit: number;
+};
+
+type ReportRow = {
+  id: number;
+  ward_id: number;
+  requested_by: string;
+  approved_by: string;
+  date_ordered: string;
+  item_names: string; // มาจาก GROUP_CONCAT
 };
 
 const newId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -31,15 +48,18 @@ export default function RequisitionForm() {
   const [requestedBy, setRequestedBy] = useState("");
   const [approvedBy, setApprovedBy] = useState("");
   const [requestDate, setRequestDate] = useState("");
-  const [data, setData] = useState(false)
+
+  const [showReport, setShowReport] = useState(false);
+  const [report, setReport] = useState<ReportRow[]>([]);
+  const [info, setInfo] = useState<InfoRow[]>([]);
 
   // ----- Items state -----
   const [items, setItems] = useState<ReqItem[]>([
-    { id: newId(), item_id: "", quantity: "1", unit_price: "0" },
+    { id: newId(), item_id: 0, quantity: "1", unit_price: "0" },
   ]);
 
   const addItem = () =>
-    setItems((prev) => [...prev, { id: newId(), item_id: "", quantity: "1", unit_price: "0" }]);
+    setItems((prev) => [...prev, { id: newId(), item_id: 0, quantity: "1", unit_price: "0" }]);
 
   const removeItem = (rowId: string) =>
     setItems((prev) => (prev.length > 1 ? prev.filter((r) => r.id !== rowId) : prev));
@@ -50,6 +70,7 @@ export default function RequisitionForm() {
   const toNumber = (v: string) => {
     const n = Number(v);
     return Number.isFinite(n) ? n : 0;
+    // ถ้าต้องการบังคับจำนวนเต็ม: return Number.isFinite(n) ? Math.floor(n) : 0;
   };
 
   const total = useMemo(
@@ -57,14 +78,36 @@ export default function RequisitionForm() {
     [items]
   );
 
-  const handleData = () => {
-    setData(!data);
-  }
+  // โหลด inventory (info)
+  useEffect(() => {
+    axios.get<InfoRow[]>("http://localhost:3000/supplier/NumericInput/info/api")
+      .then(res => setInfo(res.data))
+      .catch(err => console.error("โหลด info ล้มเหลว:", err));
+  }, []);
+
+  // โหลด report
+  useEffect(() => {
+    axios.get<{report: ReportRow[], inventory: InfoRow[]}>("http://localhost:3000/supplier/NumericInput/api")
+      .then(res => {
+        // ถ้า endpoint นี้คืน { report, inventory }
+        if (Array.isArray(res.data?.report)) setReport(res.data.report);
+        else if (Array.isArray(res.data)) setReport(res.data as any); // กันเคส API เก่า
+        // อัปเดต info ถ้าส่งมาด้วย
+        if (Array.isArray(res.data?.inventory)) setInfo(res.data.inventory);
+      })
+      .catch(err => console.error("โหลด report ล้มเหลว:", err));
+  }, []);
+
+  // autofill ราคาต่อหน่วยจาก info ตาม item_id
+  const autofillUnitPrice = (rowId: string, itemId: number) => {
+    const found = info.find(x => x.id === itemId);
+    updateItem(rowId, { unit_price: String(found?.cost_per_unit ?? 0) });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // ตรวจฟิลด์บังคับแบบง่าย ๆ
+    // ตรวจฟอร์ม
     if (!wardId || !requestedBy || !approvedBy || !requestDate) {
       alert("กรุณากรอกข้อมูลใบเบิกให้ครบ");
       return;
@@ -74,14 +117,14 @@ export default function RequisitionForm() {
       return;
     }
 
-    // สร้าง payload พร้อมแปลงเป็นตัวเลข
+    // payload
     const payload = {
       ward_id: toNumber(wardId),
       requested_by: requestedBy.trim(),
       approved_by: approvedBy.trim(),
       request_date: requestDate,
       items: items.map((it) => ({
-        item_id: /^\d+$/.test(it.item_id) ? toNumber(it.item_id) : it.item_id, // ถ้าเป็นเลขล้วนค่อยแปลงเป็น number
+        item_id: it.item_id,                // -> number แล้ว ไม่ต้อง regex
         quantity: toNumber(it.quantity),
         unit_price: toNumber(it.unit_price),
       })),
@@ -103,7 +146,7 @@ export default function RequisitionForm() {
     setRequestedBy("");
     setApprovedBy("");
     setRequestDate("");
-    setItems([{ id: newId(), item_id: "", quantity: "1", unit_price: "0" }]);
+    setItems([{ id: newId(), item_id: 0, quantity: "1", unit_price: "0" }]); // item_id กลับเป็น number 0
   };
 
   return (
@@ -189,13 +232,18 @@ export default function RequisitionForm() {
               return (
                 <div key={it.id} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end rounded-xl border p-4">
                   <div className="md:col-span-5">
-                    <Field label={`Item ID #${idx + 1}`} hint="ใส่รหัสสินค้า เช่น 10001 หรือ ITEM-ABC">
+                    <Field label={`Item ID #${idx + 1}`} hint="ใส่รหัสสินค้า เช่น 10001">
                       <input
                         className="input"
-                        type="text"
+                        type="number"
                         name="item_id"
                         value={it.item_id}
-                        onChange={(e) => updateItem(it.id, { item_id: e.target.value })}
+                        onChange={(e) => {
+                          const num = Number(e.target.value);
+                          const itemId = Number.isFinite(num) ? num : 0;
+                          updateItem(it.id, { item_id: itemId });
+                          autofillUnitPrice(it.id, itemId); // เติมราคาอัตโนมัติ
+                        }}
                         required
                       />
                     </Field>
@@ -226,8 +274,9 @@ export default function RequisitionForm() {
                         name="cost_per_unit"
                         min={0}
                         step="0.01"
-                        value={it.unit_price}
+                        value={it.unit_price}             // ✅ controlled input
                         onChange={(e) => updateItem(it.id, { unit_price: e.target.value })}
+                        /* อย่าใส่ defaultValue พร้อมกับ value */
                         required
                       />
                     </Field>
@@ -262,42 +311,72 @@ export default function RequisitionForm() {
           </div>
         </section>
 
-
-
-        {data ? (<section className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
-          <h1 className="font-bold mb-5 text-xl text-cyan-700">รายงานการเบิก</h1>
-          <div className="overflow-x-auto">
-            <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
-              <thead>
-                <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
-                  <th className="px-6 py-3 text-sm font-semibold">Ward ID</th>
-                  <th className="px-6 py-3 text-sm font-semibold">เบิกโดย Staff ID</th>
-                  <th className="px-6 py-3 text-sm font-semibold">อนุมัติโดย Staff ID</th>
-                  <th className="px-6 py-3 text-sm font-semibold">วันที่เบิก</th>
-                  <th className="px-6 py-3 text-sm font-semibold">Name Items</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                <tr className="hover:bg-gray-50 even:bg-gray-50/50 transition">
-                  <td className="px-6 py-3 text-gray-700">001</td>
-                  <td className="px-6 py-3 text-gray-700">Staff-12</td>
-                  <td className="px-6 py-3 text-gray-700">Staff-01</td>
-                  <td className="px-6 py-3 text-gray-700">2025-09-09</td>
-                  <td className="px-6 py-3 text-gray-700">Gloves, Masks</td>
-                </tr>
-                <tr className="hover:bg-gray-50 even:bg-gray-50/50 transition">
-                  <td className="px-6 py-3 text-gray-700">002</td>
-                  <td className="px-6 py-3 text-gray-700">Staff-33</td>
-                  <td className="px-6 py-3 text-gray-700">Staff-05</td>
-                  <td className="px-6 py-3 text-gray-700">2025-09-08</td>
-                  <td className="px-6 py-3 text-gray-700">Syringe</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>) : ''}
-
-
+        {/* โหมดแสดงผล */}
+        {showReport ? (
+          <section className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
+            <h1 className="font-bold mb-5 text-xl text-cyan-700">รายงานการเบิก</h1>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+                <thead>
+                  <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+                    <th className="px-6 py-3 text-sm font-semibold">Ward ID</th>
+                    <th className="px-6 py-3 text-sm font-semibold">เบิกโดย Staff ID</th>
+                    <th className="px-6 py-3 text-sm font-semibold">อนุมัติโดย Staff ID</th>
+                    <th className="px-6 py-3 text-sm font-semibold">วันที่เบิก</th>
+                    <th className="px-6 py-3 text-sm font-semibold">รายการ</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {report.map((e) => (
+                    <tr key={e.id} className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                      <td className="px-6 py-3 text-gray-700">{e.ward_id}</td>
+                      <td className="px-6 py-3 text-gray-700">{e.requested_by}</td>
+                      <td className="px-6 py-3 text-gray-700">{e.approved_by}</td>
+                      <td className="px-6 py-3 text-gray-700">
+                        {e.date_ordered ? new Date(e.date_ordered).toLocaleDateString("th-TH") : "-"}
+                      </td>
+                      <td className="px-6 py-3 text-gray-700">{e.item_names || "-"}</td>
+                    </tr>
+                  ))}
+                  {report.length === 0 && (
+                    <tr><td colSpan={5} className="px-6 py-6 text-center text-gray-500">ไม่พบข้อมูล</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : (
+          <section className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
+            <h1 className="font-bold mb-5 text-xl text-cyan-700">เวชภัณฑ์</h1>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+                <thead>
+                  <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+                    <th className="px-6 py-3 text-sm font-semibold">รหัส</th>
+                    <th className="px-6 py-3 text-sm font-semibold">ชื่อเวชภัณฑ์</th>
+                    <th className="px-6 py-3 text-sm font-semibold">ประเภทเวชภัณฑ์</th>
+                    <th className="px-6 py-3 text-sm font-semibold">จำนวนคงคลัง</th>
+                    <th className="px-6 py-3 text-sm font-semibold">ราคาต่อหน่วย</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {info.map((e) => (
+                    <tr key={e.id} className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                      <td className="px-6 py-3 text-gray-700">0{e.id}</td>
+                      <td className="px-6 py-3 text-gray-700">{e.name}</td>
+                      <td className="px-6 py-3 text-gray-700">{e.item_type}</td>
+                      <td className="px-6 py-3 text-gray-700">{e.quantity_in_stock}</td>
+                      <td className="px-6 py-3 text-gray-700">{e.cost_per_unit}</td>
+                    </tr>
+                  ))}
+                  {info.length === 0 && (
+                    <tr><td colSpan={5} className="px-6 py-6 text-center text-gray-500">ไม่พบข้อมูล</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Sticky action bar */}
@@ -310,10 +389,10 @@ export default function RequisitionForm() {
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={handleData}
+                onClick={() => setShowReport(v => !v)}
                 className="rounded-xl px-5 py-2.5 bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white font-medium shadow hover:brightness-110 active:scale-[.99]"
               >
-                รายงาน
+                {showReport ? "ดูเวชภัณฑ์" : "รายงาน"}
               </button>
               <button
                 type="reset"

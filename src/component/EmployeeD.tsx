@@ -1,11 +1,54 @@
 import { motion } from "framer-motion";
 import { User2, Phone, Stethoscope, Building2 , UsersRound } from "lucide-react";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+
+type ClinicInfo = {
+  first_name: string;
+  last_name: string;
+  address: string;
+  phone: string;
+};
+
+// ข้อมูลคลินิกตัวอย่าง (แก้ไขตามจริงได้เลย)
+const CLINICS: Record<string, ClinicInfo> = {
+  "1": { first_name: "หนึ่ง", last_name: "วัน", address: "111/1 clinic1", phone: "111" },
+  "2": { first_name: "สอง", last_name: "ทู", address: "222/2 clinic2", phone: "222" },
+  "3": { first_name: "สาม", last_name: "ทรี", address: "333/3 clinic3", phone: "333" },
+  "4": { first_name: "สี่", last_name: "โฟ", address: "444/4 clinic4", phone: "444" },
+  "5": { first_name: "ห้า", last_name: "ไฟว์", address: "555/5 clinic5", phone: "555" },
+};
 
 function EmployeeD() {
   const [loading, setLoading] = useState(false);
 
+  // เลขคลินิกที่เลือกไว้ ("0" = ไม่มีแพทย์ส่วนตัว)
+  const [clinicNo, setClinicNo] = useState<string>("0");
+
+  // ฟิลด์แพทย์/คลินิก (controlled)
+  const [docFirst, setDocFirst] = useState("");
+  const [docLast, setDocLast] = useState("");
+  const [clinicAddress, setClinicAddress] = useState("");
+  const [clinicPhone, setClinicPhone] = useState("");
+
+  // เมื่อเลือกคลินิก -> เติมค่าอัตโนมัติ
+  const onSelectClinic = (val: string) => {
+    setClinicNo(val);
+    if (val === "0") {
+      setDocFirst("");
+      setDocLast("");
+      setClinicAddress("");
+      setClinicPhone("");
+    } else {
+      const c = CLINICS[val];
+      setDocFirst(c?.first_name ?? "");
+      setDocLast(c?.last_name ?? "");
+      setClinicAddress(c?.address ?? "");
+      setClinicPhone(c?.phone ?? "");
+    }
+  };
+
+  // ส่งฟอร์ม
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -13,6 +56,7 @@ function EmployeeD() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
+    // NOTE: วันที่ใน form ใช้ name="date_registerd" (สะกดเดิม) → map ไปเป็น date_registered ใน payload
     const payload = {
       patient: {
         first_name: data.first_name,
@@ -22,14 +66,25 @@ function EmployeeD() {
         address_line: data.address_line,
         phone: data.phone,
         date_registered: data.date_registerd || null,
-        clinic_no: data.clinic_no || null
+        clinic_no: clinicNo === "0" ? null : clinicNo, // เก็บเฉพาะเมื่อมีคลินิก
       },
       kin: {
-        kin_name: data.kin_name,
-        kin_relationship: data.kin_relationship,
-        kin_address_line: data.kin_address_line,
-        kin_phone: data.kin_phone,
+        kin_name: data.kin_name || null,
+        kin_relationship: data.kin_relationship || null,
+        kin_address_line: data.kin_address_line || null,
+        kin_phone: data.kin_phone || null,
       },
+      // ถ้าไม่อยากส่ง block นี้ ให้ลบทิ้งได้
+      local_doctor:
+        clinicNo === "0"
+          ? null
+          : {
+              clinic_no: clinicNo,
+              first_name: docFirst || null,
+              last_name: docLast || null,
+              address_line: clinicAddress || null,
+              phone: clinicPhone || null,
+            },
     };
 
     try {
@@ -85,10 +140,12 @@ function EmployeeD() {
               </select>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-slate-400" />
-                <input type="number" className="input" placeholder="เบอร์โทรศัพท์" name="phone" required/>
+                {/* แนะนำให้ใช้ type="tel" เพื่อคงเลข 0 นำหน้าได้ */}
+                <input type="tel" className="input" placeholder="เบอร์โทรศัพท์" name="phone" required/>
               </div>
               <div className="flex flex-col">
                 <label className="text-sm text-slate-600 mb-1">วันที่ขึ้นทะเบียนผู้ป่วย</label>
+                {/* name เดิม: date_registerd (มี d เกิน) → ปล่อยไว้แต่ map ใน payload */}
                 <input type="date" className="input" name="date_registerd" />
               </div>
             </div>
@@ -105,7 +162,7 @@ function EmployeeD() {
               <input type="text" className="input" placeholder="ที่อยู่" name="kin_address_line" />
               <div className="flex items-center gap-2">
                 <Building2 className="h-4 w-4 text-slate-400" />
-                <input type="number" className="input" placeholder="เบอร์โทรศัพท์" name="kin_phone" />
+                <input type="tel" className="input" placeholder="เบอร์โทรศัพท์" name="kin_phone" />
               </div>
             </div>
           </div>
@@ -116,8 +173,12 @@ function EmployeeD() {
               <Stethoscope className="h-5 w-5" /> ข้อมูลแพทย์ประจำ (ถ้ามี)
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <select name="clinic_no" className="input">
-                <option value="0">เลือกหมายเลขคลินิก</option>
+              <select
+                name="clinic_no"
+                value={clinicNo}
+                onChange={(e) => onSelectClinic(e.target.value)}
+                className="input"
+              >
                 <option value="0">ไม่มีแพทย์ส่วนตัว</option>
                 <option value="1">C01</option>
                 <option value="2">C02</option>
@@ -125,12 +186,46 @@ function EmployeeD() {
                 <option value="4">C04</option>
                 <option value="5">C05</option>
               </select>
-              <input type="text" className="input" placeholder="ชื่อแพทย์" name="doctor_name" />
-              <input type="text" className="input" placeholder="สกุลแพทย์" name="lo_last_name" />
-              <input type="text" className="input" placeholder="ที่อยู่ของคลินิก" name="lo_address_line" />
+
+              {/* ช่องด้านล่างเป็น controlled ทั้งหมด */}
+              <input
+                type="text"
+                className="input"
+                placeholder="ที่อยู่ของคลินิก"
+                name="lo_address_line"
+                value={clinicAddress}
+                onChange={(e) => setClinicAddress(e.target.value)}
+                disabled={clinicNo === "0"}
+              />
+              <input
+                type="text"
+                className="input"
+                placeholder="ชื่อแพทย์"
+                name="doctor_name"
+                value={docFirst}
+                onChange={(e) => setDocFirst(e.target.value)}
+                disabled={clinicNo === "0"}
+              />
+              <input
+                type="text"
+                className="input"
+                placeholder="สกุลแพทย์"
+                name="lo_last_name"
+                value={docLast}
+                onChange={(e) => setDocLast(e.target.value)}
+                disabled={clinicNo === "0"}
+              />
               <div className="flex items-center gap-2">
                 <Building2 className="h-4 w-4 text-slate-400" />
-                <input type="number" className="input" placeholder="เบอร์โทรศัพท์คลินิก" name="lo_phone" />
+                <input
+                  type="tel"
+                  className="input"
+                  placeholder="เบอร์โทรศัพท์คลินิก"
+                  name="lo_phone"
+                  value={clinicPhone}
+                  onChange={(e) => setClinicPhone(e.target.value)}
+                  disabled={clinicNo === "0"}
+                />
               </div>
             </div>
           </div>

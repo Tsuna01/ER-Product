@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 
 function Fromdrug() {
@@ -10,6 +10,7 @@ function Fromdrug() {
     start_date: "",
     end_date: "",
   });
+  const [info, setInfo] = useState<any[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,6 +19,18 @@ function Fromdrug() {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/supplier/NumericInput/pharma/api")
+      .then(response => {
+        console.log("✅ ได้ข้อมูล:", response.data);
+        setInfo(response.data);
+      })
+      .catch(error => {
+        console.error("❌ เกิดข้อผิดพลาดในการโหลดข้อมูล!", error);
+      });
+  }, []);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +45,7 @@ function Fromdrug() {
     ) {
       alert("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
+
     }
     try {
       await axios.post("http://localhost:3000/medications/from", {
@@ -41,6 +55,7 @@ function Fromdrug() {
         units_per_day: Number(formData.units_per_day),
       });
       alert("💊 บันทึกข้อมูลสำเร็จ");
+
       setFormData({
         patient_id: "",
         item_id: "",
@@ -109,6 +124,36 @@ function Fromdrug() {
           </button>
         </div>
       </form>
+      <div className="max-w-5xl mx-auto mt-10 mb-10">
+      <section className="bg-white rounded-2xl shadow-md ring-1 ring-gray-200 p-6">
+        <h1 className="font-bold mb-5 text-xl text-cyan-700">เวชภัณฑ์</h1>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+            <thead>
+              <tr className="bg-gradient-to-r from-cyan-500 via-cyan-600 to-teal-600 text-white text-left">
+                <th className="px-6 py-3 text-sm font-semibold">รหัส</th>
+                <th className="px-6 py-3 text-sm font-semibold">ชื่อเวชภัณฑ์</th>
+                <th className="px-6 py-3 text-sm font-semibold">ประเภทเวชภัณฑ์</th>
+                <th className="px-6 py-3 text-sm font-semibold">จำนวนคงคลัง</th>
+                <th className="px-6 py-3 text-sm font-semibold">ราคาต่อหน่วย</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {info.map((e) => (
+                <tr key={e.id} className="hover:bg-gray-50 even:bg-gray-50/50 transition">
+                  <td className="px-6 py-3 text-gray-700">{e.id}</td>
+                  <td className="px-6 py-3 text-gray-700">{e.name}</td>
+                  <td className="px-6 py-3 text-gray-700">{e.item_type}</td>
+                  <td className="px-6 py-3 text-gray-700">{e.quantity_in_stock}</td>
+                  <td className="px-6 py-3 text-gray-700">{e.cost_per_unit}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      </div>
+
     </div>
   );
 }

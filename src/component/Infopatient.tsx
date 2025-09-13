@@ -2,40 +2,36 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
-type Edu = { degree: string; institute: string; year: string | null };
-type Work = { title: string; organization: string; startDate: string | null; endDate: string | null };
-type StaffView = {
+// ---------- types ----------
+type NextOfKin = { id: number; name: string; relationship: string; address: string; phone: string; };
+type LocalDoctor = { clinicNo: number | string | null; name: string | null; address: string | null; phone: string | null; };
+type PatientView = {
   id: number;
   firstName: string;
   lastName: string;
-  position: string;
-  gender: string;
-  phone: string;
-  address: string;
-  eduHistory: Edu[];
-  workHistory: Work[];
+  dateOfBirth: string | null;
+  gender: string | null;
+  address: string | null;
+  phone: string | null;
+  dateRegistered: string | null;
+  clinicNo: number | string | null;
+  nextOfKin: NextOfKin[];
+  localDoctor: LocalDoctor | null;
 };
 
-const API_BASE =
-  (import.meta as any).env?.VITE_API_BASE?.toString() || "http://localhost:3000";
+const API_BASE = (import.meta as any).env?.VITE_API_BASE?.toString() || "http://localhost:3000";
 
 function fmtDate(d?: string | null) {
   if (!d) return "-";
   const dt = new Date(d);
-  if (isNaN(+dt)) return d; // ถ้าข้อมูลไม่ใช่รูปแบบวันที่ที่ parse ได้ ให้โชว์ดิบๆ
-  return dt.toLocaleDateString("th-TH", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  if (isNaN(+dt)) return d;
+  return dt.toLocaleDateString("th-TH", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-export default function Infostaff() {
+export default function Infopatient() {
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState<StaffView | null>(null);
-  const [status, setStatus] = useState<"idle" | "loading" | "error" | "ok">(
-    "idle"
-  );
+  const [data, setData] = useState<PatientView | null>(null);
+  const [status, setStatus] = useState<"idle" | "loading" | "error" | "ok">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const fullName = useMemo(() => {
@@ -49,19 +45,14 @@ export default function Infostaff() {
     setError(null);
 
     axios
-      .get<StaffView>(`${API_BASE}/doctor/StaffInfo/${id}`, {
-        // ถ้า API ใช้คุกกี้/Session ให้เปิดบรรทัดนี้
-        // withCredentials: true,
-      })
+      .get<PatientView>(`${API_BASE}/employee/Infopatient/${id}`)
       .then((res) => {
         setData(res.data);
         setStatus("ok");
       })
       .catch((err) => {
         console.error(err);
-        setError(
-          err?.response?.data?.message || "โหลดข้อมูลไม่สำเร็จ (StaffInfo)"
-        );
+        setError(err?.response?.data?.message || "โหลดข้อมูลไม่สำเร็จ (patient/info)");
         setStatus("error");
       });
   }, [id]);
@@ -81,8 +72,8 @@ export default function Infostaff() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end md:justify-between border-b pb-6">
         <div>
-          <h1 className="text-2xl font-bold">Hospital Staff Report</h1>
-          <p className="text-gray-500 mt-1">เอกสารข้อมูลบุคลากรทางการแพทย์</p>
+          <h1 className="text-2xl font-bold">Patient Report</h1>
+          <p className="text-gray-500 mt-1">เอกสารสรุปข้อมูลผู้ป่วย</p>
         </div>
         <div className="mt-4 md:mt-0 text-sm text-gray-400">
           <span className="mr-2">ID อ้างอิง:</span>
@@ -109,7 +100,7 @@ export default function Infostaff() {
             <ul className="list-disc ml-5">
               <li>URL API ถูกต้องหรือไม่ (ควรเป็นพอร์ต 3000 ไม่ใช่ 5173)</li>
               <li>Service <code>findById</code> ทำงาน/คิวรีถูกต้อง</li>
-              <li>CORS/Authentication (ถ้าใช้คุกกี้ ให้เปิด <code>withCredentials</code>)</li>
+              <li>CORS/Authentication ถ้ามี</li>
             </ul>
           </div>
         </div>
@@ -120,7 +111,7 @@ export default function Infostaff() {
         <>
           {/* Summary */}
           <section className="mt-8 border-b pb-6">
-            <h2 className="text-xl font-bold">สรุปข้อมูลบุคลากร</h2>
+            <h2 className="text-xl font-bold">สรุปข้อมูลผู้ป่วย</h2>
             <div className="grid md:grid-cols-2 gap-4 mt-4">
               <div className="rounded-xl ring-1 ring-gray-200 p-5">
                 <dl className="grid grid-cols-3 gap-y-2 text-sm">
@@ -130,8 +121,8 @@ export default function Infostaff() {
                   <dt className="text-gray-500">ชื่อ-นามสกุล</dt>
                   <dd className="col-span-2 font-medium">{fullName}</dd>
 
-                  <dt className="text-gray-500">ตำแหน่ง</dt>
-                  <dd className="col-span-2">{data.position || "-"}</dd>
+                  <dt className="text-gray-500">วันเกิด</dt>
+                  <dd className="col-span-2">{fmtDate(data.dateOfBirth)}</dd>
 
                   <dt className="text-gray-500">เพศ</dt>
                   <dd className="col-span-2">{data.gender || "-"}</dd>
@@ -145,36 +136,44 @@ export default function Infostaff() {
 
                   <dt className="text-gray-500">เบอร์โทร</dt>
                   <dd className="col-span-2">{data.phone || "-"}</dd>
+
+                  <dt className="text-gray-500">วันลงทะเบียน</dt>
+                  <dd className="col-span-2">{fmtDate(data.dateRegistered)}</dd>
+
+                  <dt className="text-gray-500">คลินิกประจำ</dt>
+                  <dd className="col-span-2">{data.clinicNo ?? "-"}</dd>
                 </dl>
               </div>
             </div>
           </section>
 
-          {/* Education */}
+          {/* Next of Kin */}
           <section className="mt-8 border-b pb-6">
-            <h2 className="text-xl font-bold">ประวัติการศึกษา</h2>
+            <h2 className="text-xl font-bold">ข้อมูลญาติที่ติดต่อได้</h2>
             <div className="mt-4 overflow-x-auto">
               <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
                 <thead>
                   <tr className="bg-gray-100 text-left">
-                    <th className="px-4 py-3 text-sm font-semibold">วุฒิการศึกษา</th>
-                    <th className="px-4 py-3 text-sm font-semibold">สถาบัน</th>
-                    <th className="px-4 py-3 text-sm font-semibold">วันที่จบ</th>
+                    <th className="px-4 py-3 text-sm font-semibold">ชื่อญาติ</th>
+                    <th className="px-4 py-3 text-sm font-semibold">ความสัมพันธ์</th>
+                    <th className="px-4 py-3 text-sm font-semibold">ที่อยู่</th>
+                    <th className="px-4 py-3 text-sm font-semibold">เบอร์โทร</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
-                  {data.eduHistory?.length ? (
-                    data.eduHistory.map((e, idx) => (
-                      <tr key={idx}>
-                        <td className="px-4 py-3">{e.degree || "-"}</td>
-                        <td className="px-4 py-3">{e.institute || "-"}</td>
-                        <td className="px-4 py-3">{fmtDate(e.year)}</td>
+                  {data.nextOfKin?.length ? (
+                    data.nextOfKin.map((k) => (
+                      <tr key={k.id}>
+                        <td className="px-4 py-3">{k.name || "-"}</td>
+                        <td className="px-4 py-3">{k.relationship || "-"}</td>
+                        <td className="px-4 py-3">{k.address || "-"}</td>
+                        <td className="px-4 py-3">{k.phone || "-"}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className="px-4 py-3 text-gray-500" colSpan={3}>
-                        ไม่พบข้อมูลการศึกษา
+                      <td className="px-4 py-3 text-gray-500" colSpan={4}>
+                        ไม่พบข้อมูลญาติ
                       </td>
                     </tr>
                   )}
@@ -183,48 +182,35 @@ export default function Infostaff() {
             </div>
           </section>
 
-          {/* Work */}
+          {/* Local Doctor */}
           <section className="mt-8">
-            <h2 className="text-xl font-bold">ประวัติการทำงาน</h2>
-            <div className="mt-4 overflow-x-auto">
-              <table className="min-w-full border border-gray-200 rounded-xl overflow-hidden">
-                <thead>
-                  <tr className="bg-gray-100 text-left">
-                    <th className="px-4 py-3 text-sm font-semibold">ตำแหน่ง</th>
-                    <th className="px-4 py-3 text-sm font-semibold">สถานที่ทำงาน</th>
-                    <th className="px-4 py-3 text-sm font-semibold">ระยะเวลา</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {data.workHistory?.length ? (
-                    data.workHistory.map((w, idx) => {
-                      const range = `${fmtDate(w.startDate)} – ${fmtDate(
-                        w.endDate
-                      )}`;
-                      return (
-                        <tr key={idx}>
-                          <td className="px-4 py-3">{w.title || "-"}</td>
-                          <td className="px-4 py-3">{w.organization || "-"}</td>
-                          <td className="px-4 py-3">{range}</td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <tr>
-                      <td className="px-4 py-3 text-gray-500" colSpan={3}>
-                        ไม่พบประวัติการทำงาน
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+            <h2 className="text-xl font-bold">แพทย์ประจำ</h2>
+            <div className="grid md:grid-cols-2 gap-4 mt-4">
+              <div className="rounded-xl ring-1 ring-gray-200 p-5">
+                <dl className="grid grid-cols-3 gap-y-2 text-sm">
+                  <dt className="text-gray-500">รหัสคลินิก</dt>
+                  <dd className="col-span-2 font-medium">{data.localDoctor?.clinicNo ?? "-"}</dd>
+
+                  <dt className="text-gray-500">ชื่อ-สกุลแพทย์</dt>
+                  <dd className="col-span-2">{data.localDoctor?.name || "-"}</dd>
+                </dl>
+              </div>
+              <div className="rounded-xl ring-1 ring-gray-200 p-5">
+                <dl className="grid grid-cols-3 gap-y-2 text-sm">
+                  <dt className="text-gray-500">ที่อยู่</dt>
+                  <dd className="col-span-2">{data.localDoctor?.address || "-"}</dd>
+
+                  <dt className="text-gray-500">เบอร์โทร</dt>
+                  <dd className="col-span-2">{data.localDoctor?.phone || "-"}</dd>
+                </dl>
+              </div>
             </div>
           </section>
 
-          {/* Footer / Actions */}
+          {/* Footer */}
           <div className="mt-8 flex items-center gap-3 text-sm">
             <Link
-              to="/doctor"
+              to="/employee"
               className="inline-flex items-center rounded-lg px-4 py-2 ring-1 ring-gray-300 hover:bg-gray-50"
             >
               ← กลับหน้ารายการ

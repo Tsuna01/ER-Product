@@ -41,7 +41,7 @@ function ShowemlE() {
               <td className="px-6 py-3 text-gray-700">{info.clinic_no}</td>
               <td className="px-6 py-3 text-gray-700">
                 <Link
-                  to={`/employee/details/${info.patient_id}`}
+                  to={`/employee/Infopatient/${info.patient_id}`}
                   className="text-black bg-green-500 p-[5px] rounded-lg hover:bg-red-600 hover:text-blue-800"
                 >
                   รายละเอียด
