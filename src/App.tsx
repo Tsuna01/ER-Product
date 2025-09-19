@@ -1,6 +1,12 @@
 import { BrowserRouter, Routes, Navigate, Route } from "react-router-dom";
-import './App.css'
-//component
+import "./App.css";
+
+// Auth wrappers
+import AuthProvider from "./auth/AuthContext";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import RoleRoute from "./auth/RoleRoute"; // <-- ควรรองรับ props: roles: string[]
+
+// Components (feature pages)
 import StaffForm from "./component/StaffForm";
 import WardForm from "./component/WardForm";
 import EmployeeD from "./component/EmployeeD";
@@ -16,14 +22,12 @@ import EmployeeW from "./component/EmployeeW";
 import Infopatient from "./component/Infopatient";
 import Infomedication from "./component/Infomedication";
 
-
-//Layout
+// Layouts
 import LayoutLogin from "./layout/LayoutLogin";
 import MainLayout from "./layout/MainLayout";
 import HomeLayout from "./layout/HomeLayout";
 
-//Page
-// import Home from "./page/Home";
+// Top-level pages
 import Login from "./page/Login";
 import AdminPanel from "./page/AdminPanel";
 import Doctor from "./page/Doctor";
@@ -31,60 +35,63 @@ import Employee from "./page/Employee";
 import Medication from "./page/Medication";
 import Suppliers from "./page/Suppliers";
 
-
-function App() {
-
+export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-
-        <Route element={<LayoutLogin />}>
-          <Route path="/" element={<Navigate to="/auth/Login" replace />} />
-          <Route path="/auth/Login" element={<Login />} />
-        </Route>
-
-        <Route element={<MainLayout />}>
-
-          <Route path="/doctor/StaffForm" element={<StaffForm />} />
-          <Route path="/doctor/WardForm" element={<WardForm />} />
-          <Route path="/doctor/QualiForm" element={<QualiForm />} />
-          <Route path="/doctor/StaffInfo/:id" element={<Infostaff />} />
-          <Route path="/doctor/Workx" element={<Workx />} />
-
-
-          {/* Employee Routes */}
-          <Route path="/employee/D" element={<EmployeeD />} />
-          <Route path="/employee/E" element={<EmployeeE />} />
-          <Route path="/employee/U" element={<EmployeeU />} />
-          <Route path="/employee/W" element={<EmployeeW />} />
-          <Route path="/employee/Infopatient/:id" element={<Infopatient />} />
-
-          {/* From Drug */}
-          <Route path="/medications/from" element={<Fromdrug />} />
-          <Route path="/medications/info/:id" element={<Infomedication />} />
-
-
-          <Route path="/supplier/NumericInput" element={<NumericInput />} />
-          <Route path="/supplier/SupplierForm" element={<SupplierForm />} />
-
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<LayoutLogin />}>
+            <Route path="/" element={<Navigate to="/auth/login" replace />} />
+            <Route path="/auth/login" element={<Login />} />
           </Route>
 
+          <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+            <Route
+              path="/doctor/staffform"
+              element={<RoleRoute roles={["admin","per"]}><StaffForm /></RoleRoute>}
+            />
+            <Route
+              path="/doctor/wardform"
+              element={<RoleRoute roles={["admin","per","charge"]}><WardForm /></RoleRoute>}
+            />
+            <Route
+              path="/doctor/qualiform"
+              element={<RoleRoute roles={["admin","per"]}><QualiForm /></RoleRoute>}
+            />
 
-        <Route element={<HomeLayout />}>
-          <Route path="/Adminpanel" element={<AdminPanel />} />
-          <Route path="/doctor" element={<Doctor />} />
-          <Route path="/employee" element={<Employee />} />
-          <Route path="/medications" element={<Medication />} />
-          <Route path="/supplier" element={<Suppliers/>}/>
-          
+            <Route path="/doctor/staffinfo/:id" element={<RoleRoute roles={["admin","per"]}><Infostaff /></RoleRoute>} />
+            <Route path="/doctor/workx" element={<RoleRoute roles={["admin","per"]}><Workx /></RoleRoute>} />
+            <Route path="/employee/d" element={<EmployeeD />} />
+            <Route path="/employee/e" element={<RoleRoute roles={["admin","charge","medical"]}><EmployeeE /></RoleRoute>} />
+            <Route path="/employee/u" element={<EmployeeU />} />
+            <Route path="/employee/w" element={<RoleRoute roles={["admin","charge","medical"]}><EmployeeW /></RoleRoute>} />
+            <Route path="/employee/infopatient/:id" element={<RoleRoute roles={["admin","charge","medical"]}><Infopatient /></RoleRoute>} />
+            <Route path="/medications/from" element={<RoleRoute roles={["admin","charge"]}><Fromdrug /></RoleRoute>} />
+            <Route path="/medications/info/:id" element={<RoleRoute roles={["admin","charge"]}><Infomedication /></RoleRoute>} />
+            <Route path="/supplier/numericinput" element={<RoleRoute roles={["admin","charge","medical"]}><NumericInput /></RoleRoute>} />
+            <Route path="/supplier/supplierform" element={<RoleRoute roles={["admin","medical"]}><SupplierForm /></RoleRoute>} />
+          </Route>
 
-        </Route>
+          <Route element={<ProtectedRoute><HomeLayout /></ProtectedRoute>}>
+            <Route
+              path="/admin"
+              element={<AdminPanel />}
+            />
+            <Route
+              path="/doctor"
+              element={<Doctor />}
+            />
+            <Route
+              path="/employee"
+              element={<Employee />}
+            />
+            <Route path="/medications" element={<RoleRoute roles={["admin","charge","medical"]}><Medication /></RoleRoute>} />
+            <Route path="/supplier" element={<RoleRoute roles={["admin","charge","medical"]}><Suppliers /></RoleRoute>} />
+          </Route>
 
-
-
-      </Routes>
-    </BrowserRouter>
-  )
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
-
-export default App
