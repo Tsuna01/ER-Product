@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Login() {
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -11,18 +10,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  // 🟢 เพิ่ม useEffect ตรงนี้
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        const res = await axios.post(`http://localhost:3000/auth/login`, {}, { withCredentials: true });
-        localStorage.setItem("token", res.data.access_token);
-        window.location.href = "/Adminpanel"; // ข้ามหน้า login ถ้ามี session
+        const res = await axios.get(`http://localhost:3000/auth/refresh`, { withCredentials: true });
+        if (res.data?.access_token) {
+          localStorage.setItem("token", res.data.access_token);
+          window.location.href = "/Adminpanel";
+        }
       } catch {
-        // ไม่มี token หรือหมดอายุ → ให้ login ปกติ
+        // not logged in
       }
     };
-
     checkLogin();
   }, []);
 
@@ -37,10 +36,14 @@ export default function Login() {
 
     try {
       setLoading(true);
-      const res = await axios.post(`http://localhost:3000/auth/login`, { username, password, remember }, { withCredentials: true });
-      localStorage.setItem("token", res.data.token);
+      const res = await axios.post(
+        `http://localhost:3000/auth/login`,
+        { username, password, remember },
+        { withCredentials: true }
+      );
+      localStorage.setItem("token", res.data.access_token);
       alert("เข้าสู่ระบบสำเร็จ ✅");
-      window.location.href = "/dashboard"; // ล็อกอินเสร็จ → ไปหน้า dashboard
+      window.location.href = "/Adminpanel";
     } catch (e: any) {
       setErr(e?.response?.data?.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
     } finally {
@@ -49,6 +52,7 @@ export default function Login() {
   };
 
   return (
+    // ...existing JSX...
     <div className="min-h-screen w-full bg-gradient-to-b from-cyan-50 via-teal-50 to-white flex items-center justify-center px-4">
       {/* การ์ดล็อกอิน */}
       <div className="w-full max-w-md">
@@ -100,6 +104,14 @@ export default function Login() {
               </button>
             </div>
           </label>
+
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={remember} onChange={() => setRemember(r => !r)} />
+              จดจำฉัน
+            </label>
+          </div>
+
           <button
             type="submit"
             disabled={loading}
